@@ -1,12 +1,12 @@
-package com.demo.blog.entity;
+package com.demo.blog.vo;
 
 import java.util.Date;
 
 /**
- * 帖子实体
+ * 帖子 viewObject
  * @author By-Lin
  */
-public class Posts {
+public class PostsVO{
     private int postsId;
     private int authorId;
     private String postsSortIds;
@@ -18,6 +18,7 @@ public class Posts {
     private int postsPv;
     private int postsLikeCount;
     private Date postsCreateTime;
+    private int isLiked;
 
     public int getPostsId() {
         return postsId;
@@ -107,9 +108,17 @@ public class Posts {
         this.postsCreateTime = postsCreateTime;
     }
 
+    public int getIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(int isLiked) {
+        this.isLiked = isLiked;
+    }
+
     @Override
     public String toString() {
-        return "Posts{" +
+        return "PostsVO{" +
                 "postsId=" + postsId +
                 ", authorId=" + authorId +
                 ", postsSortIds='" + postsSortIds + '\'' +
@@ -121,6 +130,7 @@ public class Posts {
                 ", postsPv=" + postsPv +
                 ", postsLikeCount=" + postsLikeCount +
                 ", postsCreateTime=" + postsCreateTime +
+                ", isLiked=" + isLiked +
                 '}';
     }
 }

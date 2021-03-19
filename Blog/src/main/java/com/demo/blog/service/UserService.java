@@ -79,9 +79,22 @@ public class UserService {
      */
     public ApiResult updateUser(User user) {
         if(user.getUserId() == 0) { return new ApiResult(400,"用户id不能为空"); }
-        Boolean checkResult = User.checkUserIsEmpty(user);
-        if(checkResult) { return new ApiResult(400,"用户参数不能为空"); }
-        int row = userMapper.updateUser(user);
+        User user1 = userMapper.selectById(user.getUserId());
+        if(user1 == null) { return new ApiResult(400,"用户不存在"); }
+
+
+        if(!user.getAvatar().isEmpty()) { user1.setAvatar(user.getAvatar());}
+        if(!user.getEmail().isEmpty()) { user1.setEmail(user.getEmail());}
+        if(!user.getLoginName().isEmpty()) { user1.setLoginName(user.getLoginName());}
+        if(user.getIsAdmin() > 0) { user1.setIsAdmin(user.getIsAdmin());}
+        if(user.getStatus() > 2) { user1.setStatus(user.getStatus());}
+
+
+
+
+//        Boolean checkResult = User.checkUserIsEmpty(user);
+//        if(checkResult) { return new ApiResult(400,"用户参数不能为空"); }
+        int row = userMapper.updateUser(user1);
         if(row > 0) { return new ApiResult(200,"修改用户信息成功"); }
         return new ApiResult(500,"修改用户信息失败");
     }

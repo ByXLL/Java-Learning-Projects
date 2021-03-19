@@ -2,6 +2,7 @@ package com.demo.blog.data;
 
 /**
  * 全局 api 返回数据格式 基类
+ * @author By-Lin
  */
 public class ApiResult {
     private Integer code;

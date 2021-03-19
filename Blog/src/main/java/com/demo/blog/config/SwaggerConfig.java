@@ -11,16 +11,26 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * swagger 配置类
+ * 开启Swagger2的自动配置
+ * @author By-Lin
  */
 @Configuration
-@EnableSwagger2// 开启Swagger2的自动配置
+@EnableSwagger2
 public class SwaggerConfig {
-    @Bean //配置docket以配置Swagger具体参数
+    /**
+     * 配置docket以配置Swagger具体参数
+     * @return  Docket
+     */
+    @Bean
     public Docket docket() {
-        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo());  //Docket 实例关联上 apiInfo()
+        // Docket 实例关联上 apiInfo()
+        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo());
     }
 
-    //配置文档信息
+    /**
+     * 配置文档信息
+     * @return  ApiInfo
+     */
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder().title("My-Blog的SwaggerApi文档").description("可以直接访问的接口")
             .version("0.1")

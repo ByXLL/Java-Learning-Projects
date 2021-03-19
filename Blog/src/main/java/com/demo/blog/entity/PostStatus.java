@@ -1,8 +1,12 @@
 package com.demo.blog.entity;
 
+/**
+ * 帖子状态 枚举类
+ * @author By-Lin
+ */
+
 public enum PostStatus {
     // 删除，正常，审批中
-    Deleted(0), Normal(1), Approval(2);
-    PostStatus(int i) {
-    }
+    Normal(1), Approval(2),Deleted(3);
+    PostStatus(int i) { }
 }

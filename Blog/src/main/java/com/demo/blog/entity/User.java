@@ -4,6 +4,10 @@ import com.demo.blog.data.ApiResult;
 
 import java.util.Date;
 
+/**
+ * 用户实体类
+ * @author By-Lin
+ */
 public class User {
     private int userId;
     private String loginName;
