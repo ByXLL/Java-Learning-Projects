@@ -1,6 +1,9 @@
 package com.demo.blog.controller;
 
+import com.demo.blog.annotation.LoginTokenRequired;
+import com.demo.blog.annotation.PassTokenRequired;
 import com.demo.blog.data.ApiResult;
+import com.demo.blog.dto.PostsLikeDto;
 import com.demo.blog.entity.Posts;
 import com.demo.blog.service.PostsService;
 import com.demo.blog.utils.CommUtils;
@@ -44,12 +47,13 @@ public class PostController {
 
     /**
      * 点赞帖子
-     * @param posts     帖子实体
+     * @param postsLikeDto     帖子实体
      * @return
      */
     @PostMapping("/like")
-    public ApiResult likePosts(Posts posts) {
-        return postsService.likePosts(posts);
+    @LoginTokenRequired
+    public ApiResult likePosts(PostsLikeDto postsLikeDto) {
+        return postsService.likePosts(postsLikeDto);
     }
 
     /**
@@ -58,6 +62,7 @@ public class PostController {
      * @return          响应数据
      */
     @PostMapping("/addPosts")
+    @LoginTokenRequired
     public ApiResult addPosts(Posts posts) {
         return postsService.insertPosts(posts);
     }
@@ -68,6 +73,7 @@ public class PostController {
      * @return          响应数据
      */
     @PostMapping("/updatePosts")
+    @LoginTokenRequired
     public ApiResult updatePosts(Posts posts) {
         return postsService.updatePosts(posts);
     }

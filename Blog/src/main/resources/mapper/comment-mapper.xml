@@ -35,9 +35,6 @@
         select  <include refid="selectFields"></include>
         from comments
         where is_del = 0
-        <if test="commentId != 0">
-            and comment_id = #{commentId}
-        </if>
         <if test="postId != 0">
             and post_id = #{postId}
         </if>
@@ -48,6 +45,10 @@
             and content like concat("%", #{content}, "%")
         </if>
         order by create_time desc
+<!--        <if test="current != 0 and limit != 0">-->
+<!--            limit (current-1) * limit , limit-->
+<!--        </if>-->
+
     </select>
 
     <select id="selectCommentById" resultType="com.demo.blog.vo.CommentVO">

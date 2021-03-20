@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.blog.dao.PostsLikeMapper">
+
+    <insert id="insertPostsLike" parameterType="PostsLike">
+        insert into posts_like (posts_id,user_id,is_like) values (#{postsId},#{userId},#{isLike})
+    </insert>
+
+    <update id="updatePostsLike" parameterType="PostsLike">
+        update posts_like set is_like = #{isLike} where posts_id = #{postsId} and user_id = #{userId}
+    </update>
+
+    <select id="selectPostsLike" parameterType="com.demo.blog.dto.PostsLikeDto" resultType="PostsLike">
+        select * from posts_like where posts_id = #{postsId} and user_id = #{userId}
+    </select>
+</mapper>

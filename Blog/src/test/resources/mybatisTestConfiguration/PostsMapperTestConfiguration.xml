@@ -23,6 +23,6 @@
 
 
     <mappers>
-        <mapper resource="mapper/PostsMapper.xml"/>
+        <mapper resource="mapper/posts-mapper.xml"/>
     </mappers>
 </configuration>

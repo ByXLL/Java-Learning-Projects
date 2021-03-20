@@ -1,12 +1,14 @@
 package com.demo.blog.vo;
 
+import com.demo.blog.entity.Page;
+
 import java.util.Date;
 
 /**
  * 帖子 viewObject
  * @author By-Lin
  */
-public class PostsVO{
+public class PostsVO extends Page {
     private int postsId;
     private int authorId;
     private String postsSortIds;

@@ -1,9 +1,13 @@
 package com.demo.blog.utils;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.demo.blog.entity.User;
 import org.springframework.util.DigestUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.UUID;
 
 /***
@@ -11,6 +15,7 @@ import java.util.UUID;
  * @author By-Lin
  */
 public class CommUtils {
+    public final static String SECRET =  "fadfdfsdfrfsfdsfsdfgrhh";
     /***
      * 生成随机 uuid
      * @return  生成的uuid
@@ -28,6 +33,11 @@ public class CommUtils {
         return DigestUtils.md5DigestAsHex(key.getBytes());
     }
 
+    /**
+     * 获取ip地址
+     * @param request       request请求
+     * @return              ip地址 str
+     */
     public static String getIpAddr(HttpServletRequest request) {
         String UNKNOWN = "unknown";
         String LOCALHOST = "127.0.0.1";
@@ -65,5 +75,21 @@ public class CommUtils {
             ipAddress = "";
         }
         return ipAddress;
+    }
+
+    /**
+     * 获取用户token
+     * @param user      用户实体
+     * @return          token
+     */
+    public static String getToken(User user) {
+        int time = 30 * 60 * 1000;
+        Long now = System.currentTimeMillis();
+        Long expMils = now + time;
+        String token="";
+        token= JWT.create().withAudience(String.valueOf(user.getUserId()))
+                .withExpiresAt(new Date(expMils))
+                .sign(Algorithm.HMAC256(SECRET));
+        return token;
     }
 }

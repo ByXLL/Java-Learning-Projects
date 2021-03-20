@@ -21,19 +21,43 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
+    public ApiResult login(User user){
+        if(user == null || "".equals(user.getLoginName()) || "".equals(user.getPassword())) {
+            return new ApiResult(400,"请输入用户名和密码");
+        }
+        User user1 = userMapper.selectUser(user);
+        if(user1 == null) { return new ApiResult(400,"当前用户不存在"); }
+        if(!user1.getPassword().equals(CommUtils.getMd5(user.getPassword()))) {
+            return new ApiResult(400,"密码错误");
+        }
+        String token =  CommUtils.getToken(user1);
+        return new ApiResult(200,"登录成功",token);
+    }
+
     /**
      * 通过 id 获取用户信息
      * @param userId    用户id
      * @return          响应数据
      */
     public ApiResult findUserById(Integer userId) {
-        if("".equals(userId)) { return new ApiResult(400,"用户id不能为空"); }
+        if("".equals(userId)) { return new ApiResult(400,"用户id不能为空",false); }
         User user = userMapper.selectById(userId);
         if (user != null) {
             UserVO userVO =  model2ViewModel(user);
-            return new ApiResult(200,"获取用户信息成功",userVO);
+            return new ApiResult(200,"获取用户信息成功",userVO,true);
         }
-        return new ApiResult(400,"当前用户不存在");
+        return new ApiResult(400,"当前用户不存在",false);
+    }
+
+    /**
+     * 查询用户实体
+     * @param userId    用户id
+     * @return          用户实体
+     */
+    public User findUserEntityById(int userId) {
+        if("".equals(userId)) { throw  new IllegalArgumentException("用户id不能为空"); }
+        User user = userMapper.selectById(userId);
+        return user;
     }
 
     /**

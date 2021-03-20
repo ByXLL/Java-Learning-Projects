@@ -1,10 +1,11 @@
 package com.demo.blog.controller;
 
+import com.demo.blog.annotation.LoginTokenRequired;
+import com.demo.blog.annotation.PassTokenRequired;
 import com.demo.blog.data.ApiResult;
 import com.demo.blog.dto.CommentDto;
 import com.demo.blog.entity.Comment;
 import com.demo.blog.service.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -35,6 +36,7 @@ public class CommentController {
      * @param comment     评论实体
      * @return             响应数据
      */
+    @LoginTokenRequired
     @PostMapping("/addComment")
     public ApiResult addComment(Comment comment) {
         return commentService.insertComment(comment);
@@ -45,6 +47,7 @@ public class CommentController {
      * @param commentId     评论id
      * @return              响应数据
      */
+    @LoginTokenRequired
     @PostMapping("/deleteComment")
     public ApiResult deleteComment(@PathParam("commentId") int commentId) {
         return commentService.deleteComment(commentId);
@@ -55,6 +58,7 @@ public class CommentController {
      * @param comment       评论实体
      * @return              响应数据
      */
+    @LoginTokenRequired
     @PostMapping("/updateComment")
     public ApiResult updateComment(Comment comment) {
         return commentService.updateComment(comment);
@@ -65,6 +69,7 @@ public class CommentController {
      * @param commentDto    评论dto
      * @return              响应数据
      */
+    @LoginTokenRequired
     @GetMapping("/getComments")
     public ApiResult getComments(CommentDto commentDto) {
         return commentService.selectComments(commentDto);

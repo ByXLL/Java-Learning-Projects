@@ -1,5 +1,7 @@
 package com.demo.blog.controller;
 
+import com.demo.blog.annotation.LoginTokenRequired;
+import com.demo.blog.annotation.PassTokenRequired;
 import com.demo.blog.data.ApiResult;
 import com.demo.blog.entity.User;
 import com.demo.blog.service.UserService;
@@ -23,10 +25,21 @@ public class UserController extends ApiController {
     }
 
     /**
+     * 登录
+     * @param user      用户实体
+     * @return          响应数据
+     */
+    @PostMapping("/login")
+    public ApiResult Login(User user) {
+        return userService.login(user);
+    }
+
+    /**
      * 通过用户id 获取用户信息
      * @param userId    用户id
      * @return          响应体
      */
+    @LoginTokenRequired
     @GetMapping("/{userId}")
     public ApiResult getUserInfo(@PathVariable Integer userId) {
         return userService.findUserById(userId);
@@ -37,6 +50,7 @@ public class UserController extends ApiController {
      * @param user  用户实体
      * @return      响应数据
      */
+    @LoginTokenRequired
     @GetMapping("/getUserInfo")
     public ApiResult getUserByUserName(User user) { return userService.findUser(user); }
 
@@ -54,6 +68,7 @@ public class UserController extends ApiController {
      * @param status    用户状态
      * @return          响应数据
      */
+    @LoginTokenRequired
     @PostMapping("/updateUserStatus")
     public ApiResult updateUserStatus(@PathParam("userId") Integer userId, @PathParam("status") Integer status ) {
         return userService.updateUserStatus(userId,status);
@@ -65,6 +80,7 @@ public class UserController extends ApiController {
      * @param password      密码
      * @return
      */
+    @LoginTokenRequired
     @PostMapping("/updateUserPassword")
     public ApiResult updateUserPassword(@PathParam("userId") Integer userId, @PathParam("password") String password) {
         return userService.updateUserPassword(userId,password);
@@ -76,6 +92,7 @@ public class UserController extends ApiController {
      * @param avatar    头像url地址
      * @return          响应数据
      */
+    @LoginTokenRequired
     @PostMapping("/updateUserAvatar")
     public ApiResult updateUserAvatar(@PathParam("userId") Integer userId, @PathParam("avatar") String avatar) {
         return userService.updateUserAvatar(userId, avatar);
@@ -86,6 +103,7 @@ public class UserController extends ApiController {
      * @param user      用户实体
      * @return          响应数据
      */
+    @LoginTokenRequired
     @PostMapping("/updateUser")
     public ApiResult updateUser(User user) {
         return userService.updateUser(user);

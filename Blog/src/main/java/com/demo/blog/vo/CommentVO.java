@@ -1,8 +1,14 @@
 package com.demo.blog.vo;
 
+import com.demo.blog.entity.Page;
+
 import java.util.Date;
 
-public class CommentVO {
+/**
+ * 评论 vo
+ * @author By-Lin
+ */
+public class CommentVO extends Page {
     private int commentId;
     private int postId;
     private int userId;

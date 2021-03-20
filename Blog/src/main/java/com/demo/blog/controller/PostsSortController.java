@@ -1,5 +1,7 @@
 package com.demo.blog.controller;
 
+import com.demo.blog.annotation.LoginTokenRequired;
+import com.demo.blog.annotation.PassTokenRequired;
 import com.demo.blog.data.ApiResult;
 import com.demo.blog.entity.PostsSort;
 import com.demo.blog.service.PostsSortService;
@@ -27,6 +29,7 @@ public class PostsSortController {
      * @param postsSort     帖子分类实体
      * @return              响应数据
      */
+    @LoginTokenRequired
     @PostMapping("/addPostsSort")
     public ApiResult addPostsSort(PostsSort postsSort) {
         return postsSortService.insertPostsSort(postsSort);
@@ -37,6 +40,7 @@ public class PostsSortController {
      * @param postsSortId       帖子分类id
      * @return                  响应数据
      */
+    @LoginTokenRequired
     @PostMapping("/delPostsSort")
     public ApiResult delPostsSort(int postsSortId) {
         return postsSortService.deletePostsSort(postsSortId);
@@ -47,6 +51,7 @@ public class PostsSortController {
      * @param postsSort     帖子实体
      * @return              响应数据
      */
+    @LoginTokenRequired
     @PostMapping("/updatePostsSort")
     public ApiResult updatePostsSort(PostsSort postsSort) {
         return postsSortService.updatePostsSort(postsSort);
@@ -69,6 +74,7 @@ public class PostsSortController {
      * @param postsSortId       帖子分类id
      * @return                  响应数据
      */
+    @LoginTokenRequired
     @GetMapping("/getPostsSort")
     public ApiResult getPostsSort(@PathParam("postsSortId") int postsSortId) {
         System.out.println(postsSortId);

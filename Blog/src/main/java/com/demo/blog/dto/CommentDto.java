@@ -1,11 +1,14 @@
 package com.demo.blog.dto;
+
+import com.demo.blog.entity.Page;
+
 ;
 
 /**
  * 评论Dto
  * @author By-Lin
  */
-public class CommentDto {
+public class CommentDto extends Page {
     private int commentId;
     private int postId;
     private int userId;

@@ -6,7 +6,7 @@ package com.demo.blog.entity;
  */
 
 public enum PostStatus {
-    // 删除，正常，审批中
+    // 正常，审批中,删除
     Normal(1), Approval(2),Deleted(3);
     PostStatus(int i) { }
 }

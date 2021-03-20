@@ -1,9 +1,14 @@
 package com.demo.blog.service;
 
+import com.demo.blog.dao.PostsLikeMapper;
 import com.demo.blog.dao.PostsMapper;
+import com.demo.blog.dao.UserMapper;
 import com.demo.blog.data.ApiResult;
+import com.demo.blog.dto.PostsLikeDto;
 import com.demo.blog.entity.Posts;
-import com.demo.blog.vo.PostsVO;
+import com.demo.blog.entity.PostsLike;
+import com.demo.blog.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,10 +20,15 @@ import java.util.List;
  */
 @Service
 public class PostsService {
+    private final UserMapper userMapper;
     private final PostsMapper postsMapper;
 
-    public PostsService(PostsMapper postsMapper) {
+    private final PostsLikeMapper postsLikeMapper;
+
+    public PostsService(UserMapper userMapper, PostsMapper postsMapper, PostsLikeMapper postsLikeMapper) {
+        this.userMapper = userMapper;
         this.postsMapper = postsMapper;
+        this.postsLikeMapper = postsLikeMapper;
     }
 
     /**
@@ -54,22 +64,57 @@ public class PostsService {
 
     /**
      * 点赞
-     * @param posts     帖子实体
+     * @param postsLikeDto     帖子实体
      * @return          响应数据
      */
-    public ApiResult likePosts(Posts posts) {
-        if(posts == null) {
+    public ApiResult likePosts(PostsLikeDto postsLikeDto) {
+        if(postsLikeDto == null) {
             return new ApiResult(400,"参数不能为空");
         }
-        int row = postsMapper.updatePostsLikeCount(posts);
-        if(row > 0 ) {
-            // 这里有个问题 关于 点赞量 ++
-            Posts newPosts = postsMapper.selectById(posts.getPostsId());
-            if(newPosts != null) {
-                return new ApiResult(200,"点赞成功", newPosts);
+        if(postsLikeDto.getPostsId() == 0 ) { return new ApiResult(400,"参数不能为空"); }
+        if(postsLikeDto.getUserId() == 0) {  return new ApiResult(400,"参数不能为空"); }
+
+        User user = userMapper.selectById(postsLikeDto.getUserId());
+        Posts posts = postsMapper.selectById(postsLikeDto.getPostsId());
+        if(posts == null || user == null) { return new ApiResult(400,"操作失败,参数错误"); }
+
+        PostsLike postsLike = postsLikeMapper.selectPostsLike(postsLikeDto);
+
+        PostsLike newPostsLike = new PostsLike();
+        newPostsLike.setPostsId(postsLikeDto.getPostsId());
+        newPostsLike.setUserId(postsLikeDto.getUserId());
+
+        // 之前没有点赞
+        if(postsLike == null ) {
+            newPostsLike.setIsLike(1);
+            int insertRow = postsLikeMapper.insertPostsLike(newPostsLike);
+            if(insertRow > 0) {
+                posts.setPostsLikeCount(posts.getPostsLikeCount() +1);
+                if(updatePostsLikeCount(posts)){  return new ApiResult(200,"点赞成功");  }
+                else { return new ApiResult(400,"点赞失败"); }
+            }
+            return new ApiResult(400,"点赞失败");
+        }else {
+            // 已经点了赞
+            if(postsLike.getIsLike() == 1) {
+                newPostsLike.setIsLike(0);
+                int updateLikeRow = postsLikeMapper.updatePostsLike(newPostsLike);
+                if(updateLikeRow > 0) {
+                    posts.setPostsLikeCount(posts.getPostsLikeCount()-1);
+                    if(updatePostsLikeCount(posts)) { return new ApiResult(200,"取消点赞成功"); }
+                }
+                return new ApiResult(400,"取消点赞失败");
+            }else {
+                // 点了赞 又取消
+                newPostsLike.setIsLike(1);
+                int updateLikeRow = postsLikeMapper.updatePostsLike(newPostsLike);
+                if(updateLikeRow > 0) {
+                    posts.setPostsLikeCount(posts.getPostsLikeCount()+1);
+                    if(updatePostsLikeCount(posts)) { return new ApiResult(200,"点赞成功"); }
+                }
+                return new ApiResult(400,"点赞失败");
             }
         }
-        return new ApiResult(400,"点赞失败");
     }
 
     /**
@@ -113,5 +158,18 @@ public class PostsService {
         int row = postsMapper.insertPosts(posts);
         if(row > 0) { return new ApiResult(200,"添加成功"); }
         return new ApiResult(400,"添加失败");
+    }
+
+    /**
+     * 内部方法 处理 帖子点赞个数++
+     * @param posts     帖子实体
+     * @return
+     */
+    private Boolean updatePostsLikeCount(Posts posts){
+        int updatePostsRow = postsMapper.updatePostsLikeCount(posts);
+        if(updatePostsRow > 0) {
+            return true;
+        }
+        return false;
     }
 }

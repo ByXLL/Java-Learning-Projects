@@ -1,83 +1,50 @@
 package com.demo.blog.entity;
 
-public class Page {
-    // 当前页码
-    private int current = 1;
+import java.util.List;
 
-    // 显示上限
-    private int limit = 10;
-
-    // 数据总数
-    private int rows;
-
-
-    public int getCurrent() {
-        return current;
+/**
+ * 分页实体
+ * @param <T>
+ */
+public class Page<T> {
+    /**
+     * 分页起始页
+     */
+    private int page;
+    /**
+     * 每页记录数
+     */
+    private int size;
+    /**
+     * 返回的记录集合
+     */
+    private List<T> rows;
+    /**
+     * 总记录条数
+     */
+    private long total;
+    public int getPage() {
+        return page;
     }
-
-    public void setCurrent(int current) {
-        if(current >= 1) {
-            this.current = current;
-        }
+    public void setPage(int page) {
+        this.page = page;
     }
-
-    public int getLimit() {
-        return limit;
+    public int getSize() {
+        return size;
     }
-
-    public void setLimit(int limit) {
-        if(limit >= 1 && limit <= 100) {
-            this.limit = limit;
-        }
+    public void setSize(int size) {
+        this.size = size;
     }
-
-    public int getRows() {
+    public List<T> getRows() {
         return rows;
     }
-
-    public void setRows(int rows) {
-        if(rows >= 0) {
-            this.rows = rows;
-        }
+    public void setRows(List<T> rows) {
+        this.rows = rows;
     }
-
-    /**
-     * 获取当前页的起始行
-     */
-    public int getOffset() {
-        // current * limit - limit
-        return (current - 1) * limit;
+    public long getTotal() {
+        return total;
     }
-
-    /**
-     * 获取总数
-     * @return
-     */
-    public int getTotal() {
-        // rows / limit [+1]
-        if(rows % rows ==0) {
-            return rows / limit;
-        }else {
-            return (rows / limit) + 1;
-        }
-    }
-
-    /**
-     * 获取起始页码
-     * @return
-     */
-    public int getFrom() {
-        int from = current -2;
-        return from < 1 ? 1 : from;
-    }
-
-    /**
-     * 获取结束页码
-     * @return
-     */
-    public int getTo() {
-        int to = current + 2;
-        int total = getTotal();
-        return to > total ? total : to;
+    public void setTotal(long total) {
+        this.total = total;
     }
 }
