@@ -47,12 +47,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if (method.isAnnotationPresent(PassTokenRequired.class)) {
             PassTokenRequired passToken = method.getAnnotation(PassTokenRequired.class);
             if(passToken.required()) { return true; }
-        }
+        }else {
 
-        //检查有没有需要用户权限的注解
-        if (method.isAnnotationPresent(LoginTokenRequired.class)) {
-            LoginTokenRequired userLoginToken = method.getAnnotation(LoginTokenRequired.class);
-            if (userLoginToken.required()) {
                 // 执行认证
                 if (token == null) {
                     throw new LoginException("无token，请重新登录");
@@ -77,7 +73,36 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 }
                 return true;
             }
-        }
+//
+//        //检查有没有需要用户权限的注解
+//        if (method.isAnnotationPresent(LoginTokenRequired.class)) {
+//            LoginTokenRequired userLoginToken = method.getAnnotation(LoginTokenRequired.class);
+//            if (userLoginToken.required()) {
+//                // 执行认证
+//                if (token == null) {
+//                    throw new LoginException("无token，请重新登录");
+//                }
+//                // 获取 token 中的 user id
+//                String userId;
+//                try {
+//                    userId = JWT.decode(token).getAudience().get(0);
+//                } catch (JWTDecodeException j) {
+//                    throw new LoginException("401,权限异常");
+//                }
+//                User user = userService.findUserEntityById(Integer.parseInt(userId));
+//                if (user == null) {
+//                    throw new LoginException("用户不存在，请重新登录");
+//                }
+//                // 验证 token
+//                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(CommUtils.SECRET)).build();
+//                try {
+//                    jwtVerifier.verify(token);
+//                } catch (JWTVerificationException e) {
+//                    throw new LoginException("401,权限异常");
+//                }
+//                return true;
+//            }
+//        }
 
         return true;
     }

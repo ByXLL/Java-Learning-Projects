@@ -36,7 +36,6 @@ public class CommentController {
      * @param comment     评论实体
      * @return             响应数据
      */
-    @LoginTokenRequired
     @PostMapping("/addComment")
     public ApiResult addComment(Comment comment) {
         return commentService.insertComment(comment);
@@ -47,7 +46,6 @@ public class CommentController {
      * @param commentId     评论id
      * @return              响应数据
      */
-    @LoginTokenRequired
     @PostMapping("/deleteComment")
     public ApiResult deleteComment(@PathParam("commentId") int commentId) {
         return commentService.deleteComment(commentId);
@@ -58,7 +56,6 @@ public class CommentController {
      * @param comment       评论实体
      * @return              响应数据
      */
-    @LoginTokenRequired
     @PostMapping("/updateComment")
     public ApiResult updateComment(Comment comment) {
         return commentService.updateComment(comment);
@@ -69,7 +66,6 @@ public class CommentController {
      * @param commentDto    评论dto
      * @return              响应数据
      */
-    @LoginTokenRequired
     @GetMapping("/getComments")
     public ApiResult getComments(CommentDto commentDto) {
         return commentService.selectComments(commentDto);
@@ -80,6 +76,7 @@ public class CommentController {
      * @param commentId     评论id
      * @return              响应数据
      */
+    @PassTokenRequired
     @GetMapping("/getComment")
     public ApiResult getComment(@PathParam("commentId") int commentId) {
         return commentService.selectCommentById(commentId);
