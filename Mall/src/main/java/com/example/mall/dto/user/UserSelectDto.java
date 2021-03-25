@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 public class UserSelectDto {
-    private int id;
+    private Integer id;
     private String userName;
     private String phone;
 }

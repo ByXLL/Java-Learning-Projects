@@ -2,6 +2,7 @@ package com.example.mall.vo;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -10,11 +11,11 @@ import java.util.Date;
  */
 @Data
 public class UserVO {
-    private int id;
+    private Integer id;
     private String avatar;
     private String userName;
     private String phone;
-    private double balance;
-    private int status;
+    private BigDecimal balance;
+    private Integer status;
     private Date registTime;
 }

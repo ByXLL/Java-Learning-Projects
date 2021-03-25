@@ -2,6 +2,7 @@ package com.example.mall.dto.goods;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -10,11 +11,11 @@ import java.util.Date;
  */
 @Data
 public class GoodsDto {
-    private int goodsId;
+    private Integer goodsId;
     private String goodsName;
-    private double goodsPrice;
-    private int goodsStatus;
-    private int storeCateId;
-    private int goodsCount;
-    private int isDel;
+    private BigDecimal goodsPrice;
+    private Integer goodsStatus;
+    private Integer storeCateId;
+    private Integer goodsCount;
+    private Integer isDel;
 }

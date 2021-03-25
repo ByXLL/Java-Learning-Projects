@@ -10,8 +10,8 @@ import java.util.Date;
  */
 @Data
 public class GoodsCate {
-    private int cateId;
+    private Integer cateId;
     private String cateName;
-    private int isDel;
-    private int catePid;
+    private Integer isDel;
+    private Integer catePid;
 }

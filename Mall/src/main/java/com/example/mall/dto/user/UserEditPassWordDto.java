@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class UserEditPassWordDto {
     @ApiParam(required = true)
-    private int id;
+    private Integer id;
 
     @ApiParam(required = true)
     private String password;

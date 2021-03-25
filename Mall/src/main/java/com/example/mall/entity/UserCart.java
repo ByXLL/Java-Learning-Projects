@@ -10,7 +10,7 @@ import java.util.Date;
  */
 @Data
 public class UserCart {
-    private int id;
-    private int goodsId;
-    private int userId;
+    private Integer id;
+    private Integer goodsId;
+    private Integer userId;
 }

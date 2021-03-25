@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +71,7 @@ public class UserService implements Constants {
             User user = new User();
             user.setUserName(userAddDto.getUserName());
             user.setPassword(CommUtils.getMd5(userAddDto.getPassword()));
-            user.setBalance(0.00);
+            user.setBalance(new BigDecimal("0.00"));
             user.setStatus(1);
             user.setRegistTime(new Date());
             user.setPhone(userAddDto.getPhone());
@@ -92,7 +93,7 @@ public class UserService implements Constants {
      * @param userId    用户id
      * @return          响应数据
      */
-    public ApiResult deleteUser(int userId) {
+    public ApiResult deleteUser(Integer userId) {
         if (userId == 0) { return new ApiResult(WARNING_CODE,"用户id不能为空"); }
         UserVO userVO = userMapper.selectUserById(userId);
         if(userVO == null) { return new ApiResult(WARNING_CODE,"当前用户不存在"); }
@@ -108,7 +109,7 @@ public class UserService implements Constants {
      */
     public ApiResult updateUser(UserEditDto userEditDto) {
         if(userEditDto == null) { return new ApiResult(WARNING_CODE,"参数不能为空"); }
-        if(userEditDto.getId() == 0) { return new ApiResult(WARNING_CODE,"用户id不能为空"); }
+        if(userEditDto.getId() == null) { return new ApiResult(WARNING_CODE,"用户id不能为空"); }
 
         UserVO userVO1 = userMapper.selectUserById(userEditDto.getId());
         if(userVO1 == null) { return new ApiResult(WARNING_CODE,"修改失败，当前用户不存在");}
@@ -125,18 +126,13 @@ public class UserService implements Constants {
     }
 
     /**
-     * 字段 映射问题 余额 字段值为空
-     */
-
-
-    /**
      * 更新用户状态
      * @param userEditStatusDto     编辑用户状态 dto
      * @return      响应数据
      */
     public ApiResult updateUserStatus(UserEditStatusDto userEditStatusDto) {
         if (userEditStatusDto == null ) { return new ApiResult(WARNING_CODE,"参数不能为空"); }
-        if(userEditStatusDto.getId() == 0) { return new ApiResult(WARNING_CODE,"用户id不能为空");}
+        if(userEditStatusDto.getId() == null) { return new ApiResult(WARNING_CODE,"用户id不能为空");}
         UserVO userVO = userMapper.selectUserById(userEditStatusDto.getId());
         if(userVO == null) { return new ApiResult(WARNING_CODE,"当前用户不存在"); }
         int row = userMapper.updateUserState(userEditStatusDto);
@@ -165,14 +161,8 @@ public class UserService implements Constants {
      */
     public ApiResult updateUserPassword(UserEditPassWordDto userEditPassWordDto) {
         if(userEditPassWordDto == null) { return new ApiResult(WARNING_CODE,"参数不能为空"); }
-        if(userEditPassWordDto.getId() == 0) { return new ApiResult(WARNING_CODE,"用户id不能为空"); }
+        if(userEditPassWordDto.getId() == null) { return new ApiResult(WARNING_CODE,"用户id不能为空"); }
         if(StringUtils.isBlank(userEditPassWordDto.getPassword())) { return new ApiResult(WARNING_CODE,"新密码不能为空"); }
-
-
-        /**
-         * 此处还需要修改
-         */
-
 
         UserVO userVO = userMapper.selectUserById(userEditPassWordDto.getId());
         if(userVO == null) { return new ApiResult(WARNING_CODE,"当前用户不存在"); }
@@ -198,7 +188,7 @@ public class UserService implements Constants {
      * @param id    用户id
      * @return      响应数据
      */
-    public ApiResult findUserById(int id){
+    public ApiResult findUserById(Integer id){
         if(id ==0) { return new ApiResult(WARNING_CODE,"用户id不能为空"); }
         UserVO userVO = userMapper.selectUserById(id);
         return new ApiResult(SUCCESS_CODE,"数据获取成功",userVO);
@@ -221,7 +211,7 @@ public class UserService implements Constants {
      * @param id        用户id
      * @return          用户实体
      */
-    public User findUserEntityById(int id) {
+    public User findUserEntityById(Integer id) {
         if(id ==0) { throw  new IllegalArgumentException("用户id不能为空"); }
         return userMapper.selectUserEntityById(id);
     }

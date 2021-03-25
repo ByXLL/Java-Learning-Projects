@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/del")
-    public ApiResult deleteUser(@PathParam("id") int id) {
+    public ApiResult deleteUser(@PathParam("id") Integer id) {
         return userService.deleteUser(id);
     }
 
@@ -61,7 +61,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserById")
-    public ApiResult getUser(@PathParam("id") int id) {
+    public ApiResult getUser(@PathParam("id") Integer id) {
         return userService.findUserById(id);
     }
 

@@ -10,12 +10,12 @@ import java.util.Date;
  */
 @Data
 public class OrderGoods {
-    private int id;
-    private int goodsId;
-    private int orderId;
+    private Integer id;
+    private Integer goodsId;
+    private Integer orderId;
     private String goodsCateName;
     private String goodsName;
-    private int goodsCount;
-    private double goodsPrice;
+    private Integer goodsCount;
+    private Integer goodsPrice;
 
 }

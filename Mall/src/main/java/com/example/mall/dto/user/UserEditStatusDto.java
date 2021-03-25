@@ -10,8 +10,8 @@ import lombok.Data;
 @Data
 public class UserEditStatusDto {
     @ApiParam(required = true)
-    private int id;
+    private Integer id;
 
     @ApiParam(required = true)
-    private int status;
+    private Integer status;
 }

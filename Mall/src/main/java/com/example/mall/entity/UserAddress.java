@@ -10,7 +10,7 @@ import java.util.Date;
  */
 @Data
 public class UserAddress {
-    private int id;
+    private Integer id;
     private String address;
     private String province;
     private String city;
@@ -18,6 +18,6 @@ public class UserAddress {
     private String consignee;
     private String phone;
     private String zipCode;
-    private int isDefault;
+    private Integer isDefault;
     private Date createTime;
 }

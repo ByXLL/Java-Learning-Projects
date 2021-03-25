@@ -10,11 +10,11 @@ import java.util.Date;
  */
 @Data
 public class GoodsDesc {
-    private int descId;
+    private Integer descId;
     private String goodsName;
-    private int goodsId;
-    private int goodsStatus;
-    private int storeCateId;
-    private int goodsCount;
+    private Integer goodsId;
+    private Integer goodsStatus;
+    private Integer storeCateId;
+    private Integer goodsCount;
     private Date create_time;
 }

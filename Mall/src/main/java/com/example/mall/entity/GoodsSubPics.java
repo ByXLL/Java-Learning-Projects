@@ -10,7 +10,7 @@ import java.util.Date;
  */
 @Data
 public class GoodsSubPics {
-    private int id;
-    private int goodsId;
+    private Integer id;
+    private Integer goodsId;
     private String url;
 }
