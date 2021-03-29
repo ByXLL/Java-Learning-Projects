@@ -33,3 +33,4 @@ build/
 .vscode/
 /Mall/*.gz
 /Mall/*.log
+*.gz
