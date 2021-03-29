@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.blog.dao.PostsMapper">
+
+    <sql id="insertFields">
+        author_id, posts_sort_ids, posts_title, posts_excerpt, posts_content, posts_is_hot, posts_status, posts_pv, posts_like_count, posts_create_time
+    </sql>
+
+    <sql id="updateFields">
+        author_id, posts_sort_ids, posts_title, posts_excerpt, posts_content, posts_is_hot, posts_status, posts_pv, posts_like_count
+    </sql>
+
+    <sql id="selectFields">
+        posts_id, author_id, posts_sort_ids, posts_title, posts_excerpt, posts_content, posts_is_hot, posts_status, posts_pv, posts_like_count, posts_create_time
+    </sql>
+
+
+    <insert id="insertPosts" parameterType="Posts" keyProperty="postsId">
+        insert into posts (<include refid="insertFields"></include>)
+        values (#{authorId}, #{postsSortIds}, #{postsTitle}, #{postsExcerpt},
+        #{postsContent}, #{postsIsHot}, #{postsStatus}, #{postsPv}, #{postsLikeCount}, #{postsCreateTime})
+    </insert>
+
+    <update id="deletePosts" parameterType="int">
+        update posts
+        set posts_status = 3
+        where posts_id = #{postsId}
+    </update>
+
+    <update id="updatePosts" parameterType="Posts">
+        update posts
+        set author_id = #{authorId},
+            posts_sort_ids = #{postsSortIds},
+            posts_title = #{postsTitle},
+            posts_excerpt = #{postsExcerpt},
+            posts_content = #{postsContent},
+            posts_is_hot = #{postsIsHot},
+            posts_status = #{postsStatus}
+        where posts_id = #{postsId}
+    </update>
+
+    <update id="updatePostsPV" parameterType="Posts">
+        update posts
+        set posts_pv = #{postsPv}
+        where posts_id = #{postsId}
+    </update>
+
+    <update id="updatePostsLikeCount" parameterType="Posts">
+        update posts
+        set posts_like_count = #{postsLikeCount}
+        where posts_id = #{postsId}
+    </update>
+
+    <select id="selectById" resultType="Posts">
+        select <include refid="selectFields"></include>
+        from posts
+        where posts_id = #{postsId}
+    </select>
+
+    <select id="selectByAuthorId" resultType="Posts">
+        select <include refid="selectFields"></include>
+        from posts
+        where author_id = #{authorId}
+    </select>
+
+    <select id="selectByPostsTitle" resultType="Posts">
+        select <include refid="selectFields"></include>
+        from posts
+        where posts_title like #{authorId}
+    </select>
+
+    <select id="selectByPosts" resultType="Posts" parameterType="Posts">
+        select <include refid="selectFields"></include>
+        from posts
+        where 1 = 1
+        <if test="authorId != 0">
+            and author_id = #{authorId}
+        </if>
+        <if test="postsTitle != null">
+            and posts_title like concat('%',#{postsTitle},'%')
+        </if>
+        <if test="postsContent != null">
+            and posts_content = #{postsContent}
+        </if>
+        <if test="postsIsHot != 0">
+            and posts_is_hot = #{postsIsHot}
+        </if>
+        <if test="postsStatus != 0">
+            and posts_status = #{postsStatus}
+        </if>
+        order by posts_create_time desc
+    </select>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.blog.dao.PostsSortMapper">
+
+    <insert id="insertPostsSort" parameterType="PostsSort">
+        insert posts_sort (sort_name) values (#{sortName})
+    </insert>
+
+    <delete id="deletePostsSort">
+        delete from posts_sort
+        where posts_sort_id = #{postsSortId}
+    </delete>
+
+    <update id="updatePostsSort">
+        update posts_sort
+        set sort_name = #{sortName}
+        where posts_sort_id = #{postsSortId}
+    </update>
+
+    <select id="selectPostsSort" resultType="PostsSort" parameterType="PostsSort">
+        select * from posts_sort where 1=1
+        <if test="postsSortId > 0">
+            and posts_sort_id = #{postsSortId}
+        </if>
+        <if test="sortName != null and sortName != ''">
+            and sort_name = #{sortName}
+        </if>
+    </select>
+
+    <select id="selectPostsSortById" resultType="PostsSort">
+        select * from posts_sort where posts_sort_id = #{postsSortId}
+    </select>
+
+</mapper>

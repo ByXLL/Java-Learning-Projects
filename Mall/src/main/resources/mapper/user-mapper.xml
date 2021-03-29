@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mall.dao.UserMapper">
+
+    <sql id="insertFields">
+        avatar, user_name, password, phone, balance, status, regist_time
+    </sql>
+
+    <sql id="updateFields">
+        avatar, user_name, password, phone, balance, status
+    </sql>
+
+    <sql id="selectFields">
+        id, avatar, user_name, phone, balance, status, regist_time
+    </sql>
+
+    <insert id="insertUser" parameterType="User">
+        insert into user (<include refid="insertFields"></include>)
+        values(#{avatar}, #{userName}, #{password}, #{phone}, #{balance}, #{status}, #{registTime})
+    </insert>
+
+    <update id="deleteUser">
+        update user set status = 0
+        where id = #{userId}
+    </update>
+
+    <update id="updateUser" parameterType="com.example.mall.dto.user.UserEditDto">
+        update user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                avatar = #{avatar},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="balance != null">
+                balance = #{balance},
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateUserState" parameterType="com.example.mall.dto.user.UserEditStatusDto">
+        update user set status = #{status}
+        where id = #{id}
+    </update>
+
+    <update id="updateUserBalance" parameterType="com.example.mall.dto.user.UserEditBalanceDto">
+        update user set balance = #{balance}
+        where id = #{id}
+    </update>
+
+    <update id="updateUserPassword" parameterType="com.example.mall.dto.user.UserEditPassWordDto">
+        update user set password = #{password}
+        where id = #{id}
+    </update>
+
+    <select id="selectUser" resultType="com.example.mall.vo.UserVO" parameterType="com.example.mall.dto.user.UserSelectDto">
+        select * from user
+        where status != 0
+        <if test="id != null and id != 0">
+            and id = #{id}
+        </if>
+        <if test="userName != null and userName != ''">
+            and user_name = #{userName}
+        </if>
+        <if test="phone != null and phone != ''">
+            and phone = #{phone}
+        </if>
+    </select>
+
+    <select id="selectUserById" resultType="com.example.mall.vo.UserVO">
+        select * from user
+        where id = #{id}
+    </select>
+
+    <select id="selectUserByUserName" resultType="com.example.mall.vo.UserVO">
+        select * from user
+        where user_name = #{userName}
+    </select>
+
+    <select id="selectUserByPhone" resultType="com.example.mall.vo.UserVO">
+        select * from user
+        where phone = #{phone}
+    </select>
+
+    <select id="selectUserEntityByUserName" resultType="User">
+        select * from user
+        where user_name = #{userName}
+    </select>
+
+    <select id="selectUserEntityById" resultType="User">
+        select * from user
+        where id = #{userId}
+    </select>
+
+</mapper>
