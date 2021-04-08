@@ -1,4 +1,4 @@
-package com.example.mall.controller.admin;
+package com.example.mall.controller;
 
 import com.example.mall.annotation.PassTokenRequired;
 import com.example.mall.data.ApiResult;
@@ -24,19 +24,19 @@ public class GoodsCateController {
         this.goodsCateService = goodsCateService;
     }
 
-    @PassTokenRequired
+
     @PostMapping("/add")
     public ApiResult addGoodsCate(GoodsCateAddDto goodsCateAddDto) {
         return goodsCateService.insertGoodsCate(goodsCateAddDto);
     }
 
-    @PassTokenRequired
+
     @PostMapping("/del")
     public ApiResult deleteGoodsCate(@PathParam("goodsCateId") Integer goodsCateId){
         return goodsCateService.deleteGoodsCate(goodsCateId);
     }
 
-    @PassTokenRequired
+
     @PostMapping("/edit")
     public ApiResult updateGoodsCate(GoodsCateEditDto goodsCateEditDto) {
         return goodsCateService.updateGoodsCate(goodsCateEditDto);

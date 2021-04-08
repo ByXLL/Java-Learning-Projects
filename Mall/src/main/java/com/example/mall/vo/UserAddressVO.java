@@ -1,15 +1,16 @@
-package com.example.mall.entity;
+package com.example.mall.vo;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 商品实体
+ * 用户地址 vo
  * @author By-Lin
  */
 @Data
-public class UserAddress {
+public class UserAddressVO {
     private Integer id;
     private Integer userId;
     private String address;
@@ -20,5 +21,4 @@ public class UserAddress {
     private String phone;
     private String zipCode;
     private Integer isDefault;
-    private Date createTime;
 }

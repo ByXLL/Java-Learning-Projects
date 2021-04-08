@@ -1,4 +1,4 @@
-package com.example.mall.controller.admin;
+package com.example.mall.controller;
 
 import com.example.mall.annotation.PassTokenRequired;
 import com.example.mall.data.ApiResult;

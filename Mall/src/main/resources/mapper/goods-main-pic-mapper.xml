@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mall.dao.GoodsMainPicMapper">
+
+    <sql id="insertFields">
+        goods_id, url
+    </sql>
+
+    <insert id="insertGoodsMainPic">
+        insert goods_main_pics (<include refid="insertFields"></include>)
+        values (#{goodsId},#{url})
+    </insert>
+
+    <update id="updateGoodsMainPic" parameterType="com.example.mall.dto.goodspic.GoodsPicDto">
+        update goods_main_pics
+        set url = #{url}
+        where goods_id = #{goodsId}
+    </update>
+
+    <select id="selectGoodsMainPic" resultType="com.example.mall.entity.GoodsMainPics">
+        select * from goods_main_pics
+        where goods_id = #{goodsId}
+    </select>
+</mapper>

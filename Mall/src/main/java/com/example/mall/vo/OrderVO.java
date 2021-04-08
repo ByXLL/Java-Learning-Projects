@@ -1,17 +1,18 @@
-package com.example.mall.entity;
+package com.example.mall.vo;
 
+import com.example.mall.entity.Order;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
- * 订单实体
+ * 订单 vo
  * @author By-Lin
  */
 @Data
-public class Order {
-    private Integer id;
+public class OrderVO {
     private String orderNumber;
     private Integer userId;
     private String consignee;

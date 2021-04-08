@@ -39,7 +39,7 @@ public class GoodsCateService implements Constants {
         goodsCate.setCateName(goodsCateAddDto.getCateName());
         if(goodsCateAddDto.getCatePid() == null) { goodsCate.setCatePid(0); }
         else{ goodsCate.setCatePid(goodsCateAddDto.getCatePid()); }
-
+        goodsCate.setIsDel(0);
         int row = goodsCateMapper.insertGoodsCate(goodsCate);
         if(row > 0) { return new ApiResult(SUCCESS_CODE,"添加商品分类成功"); }
         return new ApiResult(ERROR_CODE,"添加商品分类失败");
@@ -70,7 +70,7 @@ public class GoodsCateService implements Constants {
         if(goodsCateEditDto.getCatePid() != null) {
             GoodsCateVO goodsCateVO = goodsCateMapper.selectGoodsCateById(goodsCateEditDto.getCatePid());
             if(goodsCateVO == null) { return new ApiResult(WARNING_CODE,"上级商品分类不存在"); }
-            if(goodsCateVO.getCateId().equals(goodsCateEditDto.getCatePid())) {
+            if(goodsCateVO.getCateId().equals(goodsCateEditDto.getCateId())) {
                 return new ApiResult(WARNING_CODE,"不能将上级商品分类设置为当前分类");
             }
         }

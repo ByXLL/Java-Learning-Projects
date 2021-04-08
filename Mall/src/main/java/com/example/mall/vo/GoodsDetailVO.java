@@ -2,20 +2,23 @@ package com.example.mall.vo;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
+import javax.xml.soap.Text;
 import java.util.Date;
 
 /**
- * 商品 vo
+ * 商品详情 vo
  * @author By-Lin
  */
 @Data
-public class GoodsVO {
+public class GoodsDetailVO {
     private Integer goodsId;
     private String goodsName;
-    private BigDecimal goodsPrice;
+    private Integer goodsPrice;
     private Integer goodsStatus;
     private Integer storeCateId;
     private Integer goodsCount;
     private Date createTime;
+    private String content;
+    private String mainPic;
+    private String subPics;
 }

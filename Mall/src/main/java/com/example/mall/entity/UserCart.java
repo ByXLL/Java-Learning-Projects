@@ -12,5 +12,6 @@ import java.util.Date;
 public class UserCart {
     private Integer id;
     private Integer goodsId;
+    private Integer goodsCount;
     private Integer userId;
 }

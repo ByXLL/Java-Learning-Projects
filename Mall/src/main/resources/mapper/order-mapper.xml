@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mall.dao.OrderMapper">
+
+    <!--  使用  resultMap 手动定义需要转类型的 字段映射到vo中 -->
+    <resultMap id="GoodsDetail" type="com.example.mall.vo.GoodsDetailVO">
+        <id column="content" property="content" jdbcType="LONGNVARCHAR"/>
+        <id column="main_pics" property="mainPic" jdbcType="LONGNVARCHAR"/>
+        <id column="sub_pic" property="subPics" jdbcType="LONGNVARCHAR"/>
+    </resultMap>
+
+    <sql id="insertFields">
+        order_number, user_id, consignee, user_phone, user_address, total_price, status, pay_time, create_time
+    </sql>
+
+    <sql id="selectFields">
+        ${alias}.order_number,${alias}.user_id, ${alias}.consignee, ${alias}.user_phone, ${alias}.user_address, ${alias}.total_price, ${alias}.status, ${alias}.pay_time, ${alias}.create_time
+    </sql>
+
+    <insert id="insertOrder" parameterType="Order">
+        insert into `order` (<include refid="insertFields"/>)
+        values(#{orderNumber,jdbcType=VARCHAR},
+            #{userId,jdbcType=INTEGER},
+            #{consignee,jdbcType=VARCHAR}
+            #{userPhone,jdbcType=VARCHAR},
+            #{userAddress,jdbcType=VARCHAR},
+            #{totalPrice,jdbcType=DECIMAL},
+            #{status,jdbcType=INTEGER},
+            #{payTime,jdbcType=TIMESTAMP},
+            #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <update id="deleteOrder">
+        update `order` set status = 0 where order_number = #{orderNumber,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateOrderStatus" parameterType="com.example.mall.dto.order.OrderStatusDto">
+        update `order` set status = #{status,jdbcType=INTEGER} where order_number = #{orderNumber,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateOrder" parameterType="com.example.mall.dto.order.OrderEditDto">
+        update `order`
+        <set>
+            <if test="userAddress != null and userAddress != ''">
+                user_address = #{userAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="consignee != null and consignee != ''">
+               consignee = #{consignee,jdbcType=VARCHAR},
+            </if>
+            <if test="userPhone != null and userPhone != ''">
+                user_phone = #{userPhone,jdbcType=VARCHAR}
+            </if>
+        </set>
+    </update>
+
+    <update id="payOrder">
+        update `order` set status = 2 , pay_time = now() where order_number = #{orderNumber,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectOrder" parameterType="com.example.mall.dto.order.OrderSelectDto" resultType="com.example.mall.vo.OrderDetailVO">
+        select <include refid="selectFields"><property name="alias" value="o"/> </include>
+        from `order` as o
+        <where>
+            1=1
+            <if test="orderNumber != null and orderNumber != ''">
+                and o.order_number = #{orderNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="userId != null">
+                and o.user_id = #{userId,jdbcType=INTEGER}
+            </if>
+            <if test="consignee != null and consignee != ''">
+                and o.consignee = #{consignee,jdbcType=VARCHAR}
+            </if>
+            <if test="userPhone != null and userPhone != ''">
+                and o.user_phone = #{userPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+               and o.status = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+        order by o.create_time desc
+    </select>
+
+    <select id="selectOrderByOrderNumber" resultType="com.example.mall.vo.OrderVO">
+        select <include refid="selectFields"><property name="alias" value="o"/></include>
+        from `order` as o
+        where o.order_number = #{orderNumber,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

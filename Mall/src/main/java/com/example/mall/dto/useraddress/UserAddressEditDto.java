@@ -1,17 +1,20 @@
-package com.example.mall.entity;
+package com.example.mall.dto.useraddress;
 
+import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
- * 商品实体
+ * 用户 地址编辑 dto
  * @author By-Lin
  */
 @Data
-public class UserAddress {
+public class UserAddressEditDto {
+    @ApiParam(required = true)
     private Integer id;
+
+    @ApiParam(required = true)
     private Integer userId;
+
     private String address;
     private String province;
     private String city;
@@ -20,5 +23,4 @@ public class UserAddress {
     private String phone;
     private String zipCode;
     private Integer isDefault;
-    private Date createTime;
 }
