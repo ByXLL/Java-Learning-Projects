@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mall.dao.GoodsCateMapper">
+
+    <sql id="insertFields">
+        cate_name, is_del, cate_pid
+    </sql>
+
+    <sql id="updateFields">
+        cate_name, cate_pid
+    </sql>
+
+    <sql id="selectFields">
+        cate_id, cate_name, cate_pid
+    </sql>
+
+    <insert id="insertGoodsCate" parameterType="GoodsCate">
+        insert into goods_cate (<include refid="insertFields"></include>)
+        values (#{cateName},#{isDel},#{catePid})
+    </insert>
+
+    <update id="deleteGoodsCate">
+        update goods_cate set is_del = 1 where cate_id = #{goodsCateId}
+    </update>
+
+    <update id="updateGoodsCate" parameterType="com.example.mall.dto.goodscate.GoodsCateEditDto">
+        update goods_cate
+        <set>
+            <if test="cateName != null and cateName != ''">
+                cate_name = #{cateName},
+            </if>
+            <if test="catePid != null">
+                cate_pid = #{catePid}
+            </if>
+        </set>
+        where cate_id = #{cateId}
+    </update>
+
+    <select id="selectGoodsCateById" resultType="com.example.mall.vo.GoodsCateVO">
+        select <include refid="selectFields"></include> from goods_cate
+        where is_del != 1 and cate_id = #{goodsCateId}
+    </select>
+
+    <select id="selectGoodsCateByPid" resultType="com.example.mall.vo.GoodsCateVO">
+        select <include refid="selectFields"></include> from goods_cate
+        where is_del != 1 and cate_pid = #{goodsCatePid}
+    </select>
+
+    <select id="selectGoodsCateName" resultType="com.example.mall.vo.GoodsCateVO">
+        select <include refid="selectFields"></include> from goods_cate
+        where is_del != 1 and cate_name like concat("%",#{goodsCateName},"%")
+    </select>
+
+    <select id="selectAllGoodsCate" resultType="com.example.mall.vo.GoodsCateVO">
+        select * from goods_cate
+        where is_del != 1
+    </select>
+
+    <select id="selectAllGoodsCate2" resultType="com.example.mall.vo.GoodsCateTreeVO">
+        select * from goods_cate
+        where is_del != 1
+    </select>
+</mapper>

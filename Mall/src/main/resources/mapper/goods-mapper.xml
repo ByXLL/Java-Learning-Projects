@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mall.dao.GoodsMapper">
+
+    <!--  使用  resultMap 手动定义需要转类型的 字段映射到vo中 -->
+    <resultMap id="GoodsDetail" type="com.example.mall.vo.GoodsDetailVO">
+        <id column="content" property="content" jdbcType="LONGNVARCHAR"/>
+        <id column="main_pics" property="mainPic" jdbcType="LONGNVARCHAR"/>
+        <id column="sub_pic" property="subPics" jdbcType="LONGNVARCHAR"/>
+    </resultMap>
+
+    <sql id="insertFields">
+        goods_name, goods_price, goods_status, store_cate_id, goods_count, is_del, create_time
+    </sql>
+
+    <sql id="selectFields">
+        ${alias}.goods_id,${alias}.goods_name, ${alias}.goods_price, ${alias}.goods_status, ${alias}.store_cate_id, ${alias}.goods_count, ${alias}.create_time
+    </sql>
+    <insert id="insertGoods" parameterType="Goods" keyProperty="goodsId">
+        insert goods (<include refid="insertFields"></include>)
+        values (#{goodsName},#{goodsPrice},#{goodsStatus},#{storeCateId},#{goodsCount},#{isDel},#{createTime})
+    </insert>
+
+    <update id="deleteGoods">
+        update goods set is_del = 1 where goods_id=#{goodsId}
+    </update>
+
+    <update id="updateGoods" parameterType="com.example.mall.dto.goods.GoodsEditDto">
+        update goods
+        <set>
+            <if test="goodsName != null and goodsName != ''">
+                goods_name = #{goodsName},
+            </if>
+            <if test="goodsPrice != null">
+                goods_price = #{goodsPrice},
+            </if>
+            <if test="goodsStatus != null">
+                goods_status = #{goodsStatus},
+            </if>
+            <if test="storeCateId != null">
+                store_cate_id = #{storeCateId},
+            </if>
+            <if test="goodsCount != null">
+                goods_count = #{goodsCount},
+            </if>
+        </set>
+        where goods_id = #{goodsId}
+    </update>
+
+    <select id="selectGoods" resultType="com.example.mall.vo.GoodsVO">
+        select <include refid="selectFields"><property name="alias" value="g"/></include> from goods as g
+        where is_del != 1
+        <if test="goodsId != null">
+            and goods_id = #{goodsId}
+        </if>
+        <if test="goodsName != null and goodsName != ''">
+            and goods_name like concat("%", #{goodsName}, "%")
+        </if>
+        <if test="goodsStatus != null">
+            and goods_status = #{goodsStatus}
+        </if>
+        <if test="storeCateId != null">
+            and store_cate_id = #{storeCateId}
+        </if>
+        order by create_time desc;
+    </select>
+
+    <select id="selectGoodsById" resultType="com.example.mall.vo.GoodsVO">
+        select <include refid="selectFields"><property name="alias" value="g"/></include> from goods as g
+        where is_del != 1 and goods_id = #{goodsId}
+    </select>
+
+    <select id="selectGoodsCount" resultType="java.lang.Integer" parameterType="com.example.mall.dto.goods.GoodsSelectDto">
+        select count(1) from goods
+        where is_del != 1
+        <if test="goodsId != null">
+            and goods_id = #{goodsId}
+        </if>
+        <if test="goodsName != null and goodsName != ''">
+            and goods_name like concat("%", #{goodsName}, "%")
+        </if>
+        <if test="goodsStatus != null">
+            and goods_status = #{goodsStatus}
+        </if>
+        <if test="storeCateId != null">
+            and store_cate_id = #{storeCateId}
+        </if>
+    </select>
+
+    <select id="selectGoodsDetail" resultMap="GoodsDetail">
+        select <include refid="selectFields"><property name="alias" value="g"/></include>,gd.content as content, gmp.url as main_pics, gsp.url as sub_pic
+        from goods as g
+        inner join goods_desc as gd on gd.goods_id = g.goods_id
+        inner join goods_main_pics as gmp on gmp.goods_id = g.goods_id
+        inner join goods_sub_pics as gsp on gsp.goods_id = g.goods_id
+        where is_del != 1
+        <if test="goodsId != null">
+            and g.goods_id = #{goodsId}
+        </if>
+        <if test="goodsName != null and goodsName != ''">
+            and g.goods_name like concat("%", #{goodsName}, "%")
+        </if>
+        <if test="goodsStatus != null">
+            and g.goods_status = #{goodsStatus}
+        </if>
+        <if test="storeCateId != null">
+            and g.store_cate_id = #{storeCateId}
+        </if>
+        order by g.create_time desc;
+    </select>
+
+    <select id="selectGoodsDetailById" resultMap="GoodsDetail">
+        select <include refid="selectFields"><property name="alias" value="g"/></include>
+        ,gd.content as content, gmp.url as main_pics, gsp.url as sub_pic
+        from goods as g
+        inner join goods_desc as gd on gd.goods_id = g.goods_id
+        inner join goods_main_pics as gmp on gmp.goods_id = g.goods_id
+        inner join goods_sub_pics as gsp on gsp.goods_id = g.goods_id
+        where is_del != 1 and g.goods_id = #{goodsId}
+    </select>
+
+    <select id="selectGoodsIdList" resultType="java.lang.String">
+        select goods_id from goods where is_del = 0
+    </select>
+</mapper>

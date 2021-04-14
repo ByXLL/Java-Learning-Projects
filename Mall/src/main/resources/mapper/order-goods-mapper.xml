@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mall.dao.OrderGoodsMapper">
+
+    <!--  使用  resultMap 手动定义需要转类型的 字段映射到vo中 -->
+    <resultMap id="GoodsDetail" type="com.example.mall.vo.GoodsDetailVO">
+        <id column="content" property="content" jdbcType="LONGNVARCHAR"/>
+        <id column="main_pics" property="mainPic" jdbcType="LONGNVARCHAR"/>
+        <id column="sub_pic" property="subPics" jdbcType="LONGNVARCHAR"/>
+    </resultMap>
+
+    <sql id="insertFields">
+        goods_id, order_number, goods_cate_name, goods_name, goods_count, goods_price
+    </sql>
+
+    <sql id="selectFields">
+        goods_id, order_number, goods_cate_name, goods_name, goods_count, goods_price
+    </sql>
+
+    <insert id="insertOrderGoods" parameterType="OrderGoods" keyProperty="id">
+        insert into order_goods (<include refid="insertFields"/>)
+        values (#{goodsId,jdbcType=INTEGER},#{orderNumber,jdbcType=VARCHAR},#{goodsCateName,jdbcType=VARCHAR},#{goodsName,jdbcType=VARCHAR},#{goodsCount,jdbcType=INTEGER},#{goodsPrice,jdbcType=DECIMAL})
+    </insert>
+
+    <select id="selectByOrderNumber" resultType="com.example.mall.vo.OrderGoodsVO">
+        select <include refid="selectFields"/> from order_goods
+        where order_number = #{orderNumber,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectOrderGoodsByNumber" resultType="com.example.mall.vo.OrderGoodsVO">
+        select <include refid="selectFields"/> from order_goods
+        where order_number in
+        <foreach collection="orderNumbers" item="number" index="index" open="(" close=")" separator=",">
+            #{number}
+        </foreach>
+    </select>
+</mapper>
