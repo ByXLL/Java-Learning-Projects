@@ -1,4 +1,4 @@
-package com.brodog.mall.admin.vo;
+package com.brodog.mall.admin.vo.goods;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;

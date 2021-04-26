@@ -1,22 +1,22 @@
-package com.brodog.mall.admin.dto.goods;
+package com.brodog.mall.admin.vo.goods;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
 
 /**
- * 商品品牌 dto
+ * 商品品牌 vo
  * @author By-Lin
  */
 @Data
-public class GoodsBrandDto {
-    @ApiModelProperty(value = "品牌id")
+public class GoodsBranVO {
+    @ApiModelProperty(value = "品牌名称")
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     @ApiModelProperty(value = "品牌名称")
-    @NotEmpty(message = "品牌名称为空")
     private String name;
 
     @ApiModelProperty(value = "品牌首字母")
@@ -29,13 +29,8 @@ public class GoodsBrandDto {
     private Integer isShow;
 
     @ApiModelProperty(value = "logo")
-    @NotEmpty(message = "logo为空")
     private String logo;
 
     @ApiModelProperty(value = "品牌专区 图片")
-    @NotEmpty(message = "品牌专区图片为空")
     private String bigPic;
-
-    @ApiModelProperty(value = "是否删除")
-    private Integer isDel;
 }

@@ -41,6 +41,16 @@ public class GoodsAttrController {
         return goodsAttrService.insert(goodsAttrDto);
     }
 
+    @PostMapping("/del")
+    public ApiResult delete(@PathParam("id") Long goodsAttrId) {
+        return goodsAttrService.delete(goodsAttrId);
+    }
+
+    @PostMapping("/update")
+    public ApiResult update(@RequestBody GoodsAttrDto goodsAttrDto) {
+        return goodsAttrService.update(goodsAttrDto);
+    }
+
     @GetMapping("/listByName")
     public ApiResult selectAllByName(@PathParam("name") String name) {
         return goodsAttrService.selectByName(name);
@@ -49,6 +59,11 @@ public class GoodsAttrController {
     @GetMapping("/list")
     public ApiResult selectAll() {
         return goodsAttrService.selectAll();
+    }
+
+    @GetMapping("/getById")
+    public ApiResult selectById(@PathParam("id") Long goodsAttrId) {
+        return goodsAttrService.selectById(goodsAttrId);
     }
 }
 

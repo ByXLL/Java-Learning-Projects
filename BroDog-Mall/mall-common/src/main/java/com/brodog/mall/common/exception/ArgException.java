@@ -8,4 +8,7 @@ public class ArgException extends IllegalArgumentException {
     public ArgException(String s) {
         super(s);
     }
+    public ArgException() {
+        super("参数异常");
+    }
 }

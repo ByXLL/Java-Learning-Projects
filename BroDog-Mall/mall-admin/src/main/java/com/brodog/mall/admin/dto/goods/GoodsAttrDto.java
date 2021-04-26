@@ -1,5 +1,7 @@
 package com.brodog.mall.admin.dto.goods;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
@@ -15,6 +17,9 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class GoodsAttrDto {
+    @ApiModelProperty(value = "商品-属性id")
+    private Long id;
+
     @ApiModelProperty(value = "属性名称",required = true)
     @NotEmpty(message = "属性名称为空")
     private String name;
