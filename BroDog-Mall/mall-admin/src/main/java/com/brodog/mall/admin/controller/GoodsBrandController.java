@@ -6,6 +6,7 @@ import com.brodog.mall.admin.dto.goods.GoodsBrandDto;
 import com.brodog.mall.admin.service.GoodsBrandService;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.PagerParam;
+import com.brodog.mall.common.enums.HttpCodeEnum;
 import com.brodog.mall.common.exception.ArgException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class GoodsBrandController {
 
     @PostMapping("/del")
     public ApiResult del(@PathParam("id") Long id) {
-        return new ApiResult(200,"111",id);
+        return goodsBrandService.delete(id);
     }
 
 
@@ -50,8 +51,8 @@ public class GoodsBrandController {
     }
 
     @GetMapping("/getList")
-    public ApiResult getList(PagerParam pagerParam) {
-        return goodsBrandService.selectByPage(pagerParam);
+    public ApiResult getList(PagerParam pagerParam, String name) {
+        return goodsBrandService.selectByPage(pagerParam, name);
     }
 
     @GetMapping("/getById")

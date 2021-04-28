@@ -24,4 +24,4 @@ mybatis-plus:
     db-config:
       logic-delete-value: 1
       logic-not-delete-value: 0
-  mapper-locations: classpath*:/mapper/xml/*Mapper.xml
+  mapper-locations: classpath*:/com/brodog/mall/admin/mapper/xml/*Mapper.xml

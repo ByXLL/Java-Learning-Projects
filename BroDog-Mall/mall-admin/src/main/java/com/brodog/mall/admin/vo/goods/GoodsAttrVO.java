@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class GoodsAttrVo {
+public class GoodsAttrVO {
     @ApiModelProperty(value = "商品-属性id")
     @JsonSerialize(using= ToStringSerializer.class)
     private Long id;

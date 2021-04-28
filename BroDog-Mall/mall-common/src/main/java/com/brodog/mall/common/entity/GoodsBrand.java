@@ -1,17 +1,19 @@
 package com.brodog.mall.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.sql.Timestamp;
-import com.baomidou.mybatisplus.annotation.Version;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.Date;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -23,6 +25,8 @@ import lombok.experimental.Accessors;
  * @since 2021-04-21
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="GoodsBrand对象", description="商品品牌")
@@ -58,11 +62,9 @@ public class GoodsBrand implements Serializable {
 
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
-    private Timestamp createTime;
+    private Date createTime;
 
     @ApiModelProperty(value = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Timestamp updateTime;
-
-
+    private Date updateTime;
 }

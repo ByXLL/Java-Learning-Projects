@@ -24,8 +24,8 @@
         <mysql.connector.version>8.0.23</mysql.connector.version>
         <mybatis.plus.version>3.0.5</mybatis.plus.version>
         <velocity.engine.version>2.3</velocity.engine.version>
-        <druid.version>1.2.5</druid.version>
-        <druid.spring.boot.starter.version>1.2.5</druid.spring.boot.starter.version>
+        <druid.version>1.1.21</druid.version>
+        <druid.spring.boot.starter.version>1.1.21</druid.spring.boot.starter.version>
         <commons.lang3.version>3.11</commons.lang3.version>
         <swagger.version>2.1.7</swagger.version>
         <swagger.annotations.version>1.5.20</swagger.annotations.version>

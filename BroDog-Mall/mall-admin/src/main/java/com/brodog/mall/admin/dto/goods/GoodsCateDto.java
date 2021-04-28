@@ -1,64 +1,54 @@
-package com.brodog.mall.common.entity;
+package com.brodog.mall.admin.dto.goods;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-import java.util.Date;
-
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import lombok.NoArgsConstructor;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
- * <p>
- * 商品分类
- * </p>
- *
+ * 商品 分类 dto
  * @author By-Lin
- * @since 2021-04-21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-@ApiModel(value="GoodsCate对象", description="商品分类")
-public class GoodsCate implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+@AllArgsConstructor
+@NoArgsConstructor
+public class GoodsCateDto {
     @ApiModelProperty(value = "商品分类id")
-    @TableId(value = "id", type = IdType.ID_WORKER)
     private Long id;
 
     @ApiModelProperty(value = "上级分类")
     private Long pid;
 
     @ApiModelProperty(value = "分类名称")
+    @NotEmpty(message = "分类名称为空")
     private String name;
 
     @ApiModelProperty(value = "商品个数")
+    @NotNull(message = "商品个数为空")
     private Integer count;
 
     @ApiModelProperty(value = "分类等级，1 一级，2 二级")
     private Integer level;
 
     @ApiModelProperty(value = "数量单位")
+    @NotEmpty(message = "数量单位为空")
     private String unit;
 
     @ApiModelProperty(value = "图标")
+    @NotEmpty(message = "图标为空")
     private String icon;
 
     @ApiModelProperty(value = "排序")
     private Integer sort;
 
     @ApiModelProperty(value = "关键词")
+    @NotEmpty(message = "关键词为空")
     private String keyword;
 
     @ApiModelProperty(value = "描述")
+    @NotEmpty(message = "描述为空")
     private String description;
 
     @ApiModelProperty(value = "是否显示，0 否，1 是")
@@ -68,14 +58,5 @@ public class GoodsCate implements Serializable {
     private Integer isMenu;
 
     @ApiModelProperty(value = "是否删除，0 否，1 是")
-    @TableLogic
     private Integer isDel;
-
-    @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
-
-    @ApiModelProperty(value = "修改时间")
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
 }

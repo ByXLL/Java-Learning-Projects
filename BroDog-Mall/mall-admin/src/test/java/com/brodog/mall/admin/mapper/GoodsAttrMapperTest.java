@@ -1,5 +1,6 @@
 package com.brodog.mall.admin.mapper;
 
+import com.brodog.mall.admin.vo.goods.GoodsBranVO;
 import com.brodog.mall.common.entity.GoodsAttr;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

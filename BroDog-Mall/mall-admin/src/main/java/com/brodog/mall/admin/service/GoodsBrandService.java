@@ -43,9 +43,10 @@ public interface GoodsBrandService extends IService<GoodsBrand> {
     /**
      * 分页查询 品牌
      * @param pagerParam      分页对象
+     * @param name            品牌名
      * @return                响应数据
      */
-    ApiResult selectByPage(PagerParam pagerParam);
+    ApiResult selectByPage(PagerParam pagerParam, String name);
 
     /**
      * 通过 id 获取品牌

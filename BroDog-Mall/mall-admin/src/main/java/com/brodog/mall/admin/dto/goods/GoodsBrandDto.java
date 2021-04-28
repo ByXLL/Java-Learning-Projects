@@ -1,6 +1,5 @@
 package com.brodog.mall.admin.dto.goods;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 

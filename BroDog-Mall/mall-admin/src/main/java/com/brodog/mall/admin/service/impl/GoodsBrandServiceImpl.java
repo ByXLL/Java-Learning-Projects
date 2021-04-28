@@ -1,6 +1,8 @@
 package com.brodog.mall.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.brodog.mall.admin.dto.goods.GoodsBrandDto;
 import com.brodog.mall.admin.vo.goods.GoodsBranVO;
@@ -13,11 +15,13 @@ import com.brodog.mall.common.entity.PagerParam;
 import com.brodog.mall.common.enums.HttpCodeEnum;
 import com.brodog.mall.common.exception.ArgException;
 import com.brodog.mall.common.exception.OperationalException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * <p>
@@ -59,19 +63,33 @@ public class GoodsBrandServiceImpl extends ServiceImpl<GoodsBrandMapper, GoodsBr
         GoodsBrand goodsBrand = goodsBrandMapper.selectById(goodsBrandDto.getId());
         if(goodsBrand == null) { throw new OperationalException(); }
         BeanUtils.copyProperties(goodsBrandDto,goodsBrand);
-        int row = goodsBrandMapper.update(goodsBrand,null);
+        int row = goodsBrandMapper.updateById(goodsBrand);
         if(row >0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();
     }
 
     @Override
-    public ApiResult selectByPage(PagerParam pagerParam) {
-//        IPage<GoodsBranVO> page = new Page<>(1,2);
-//        IPage<GoodsBranVO> mapPage = goodsBrandMapper.selectMyPage(page, null);
+    public ApiResult selectByPage(PagerParam pagerParam, String name) {
+//        QueryWrapper<GoodsBrand> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.select("id","name","first_letter","sort","is_show","logo","big_pic");
+//        if (!StringUtils.isBlank(name)) {
+//            queryWrapper.like("name",name);
+//        }
+//        IPage<GoodsBrand> mapPage = goodsBrandMapper.selectPage(
+//            new Page<>(pagerParam.getPage(), pagerParam.getSize()),
+//            queryWrapper
+//        );
+//        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), mapPage);
 
-        List<GoodsBranVO> goodsBranVOList = goodsBrandMapper.testSql();
-
-        return new ApiResult(200,"获取成功",goodsBranVOList);
+        QueryWrapper<GoodsBranVO> queryWrapper = new QueryWrapper<>();
+        if (!StringUtils.isBlank(name)) {
+            queryWrapper.like("name",name);
+        }
+        IPage<GoodsBranVO> mapPage = goodsBrandMapper.selectMyPage(
+            new Page<>(pagerParam.getPage(), pagerParam.getSize()),
+            queryWrapper
+        );
+        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), mapPage);
     }
 
     @Override
@@ -79,6 +97,8 @@ public class GoodsBrandServiceImpl extends ServiceImpl<GoodsBrandMapper, GoodsBr
         if(id == null) { throw new ArgException(); }
         GoodsBrand goodsBrand = goodsBrandMapper.selectById(id);
         if(goodsBrand == null) { return new ApiResult(HttpCodeEnum.ERROR.getCode(),HttpCodeEnum.ERROR.getDesc()); }
-        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(),goodsBrand);
+        GoodsBranVO goodsBranVO = new GoodsBranVO();
+        BeanUtils.copyProperties(goodsBrand,goodsBranVO);
+        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(),goodsBranVO);
     }
 }

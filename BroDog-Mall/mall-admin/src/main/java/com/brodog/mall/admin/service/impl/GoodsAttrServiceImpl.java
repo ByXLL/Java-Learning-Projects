@@ -2,7 +2,7 @@ package com.brodog.mall.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.brodog.mall.admin.dto.goods.GoodsAttrDto;
-import com.brodog.mall.admin.vo.goods.GoodsAttrVo;
+import com.brodog.mall.admin.vo.goods.GoodsAttrVO;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.GoodsAttr;
 import com.brodog.mall.admin.mapper.GoodsAttrMapper;
@@ -75,13 +75,13 @@ public class GoodsAttrServiceImpl extends ServiceImpl<GoodsAttrMapper, GoodsAttr
 
     @Override
     public ApiResult selectAll() {
-        List<GoodsAttrVo> goodsAttrVoList = goodsAttrMapper.selectList(null).stream().map(item -> new GoodsAttrVo(
+        List<GoodsAttrVO> goodsAttrVOList = goodsAttrMapper.selectList(null).stream().map(item -> new GoodsAttrVO(
                 item.getId(),
                 item.getName(),
                 item.getAttrCount(),
                 item.getSpecCount()
         )).collect(Collectors.toList());
-        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), goodsAttrVoList);
+        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), goodsAttrVOList);
     }
 
     @Override
@@ -92,13 +92,13 @@ public class GoodsAttrServiceImpl extends ServiceImpl<GoodsAttrMapper, GoodsAttr
         }else {
             queryWrapper.like("name",name);
         }
-        List<GoodsAttrVo> goodsAttrVoList = goodsAttrMapper.selectList(queryWrapper).stream().map(item -> new GoodsAttrVo(
+        List<GoodsAttrVO> goodsAttrVOList = goodsAttrMapper.selectList(queryWrapper).stream().map(item -> new GoodsAttrVO(
             item.getId(),
             item.getName(),
             item.getAttrCount(),
             item.getSpecCount()
         )).collect(Collectors.toList());
-        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(),goodsAttrVoList);
+        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), goodsAttrVOList);
     }
 
     @Override
