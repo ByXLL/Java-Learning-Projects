@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.brodog.mall.admin.mapper.GoodsAttrValueMapper">
 
+    <select id="selectMyPage" resultType="com.brodog.mall.admin.vo.goods.GoodsAttrValueVO">
+        select * from goods_attr_value <where>${ew.sqlSegment}</where>
+    </select>
 </mapper>

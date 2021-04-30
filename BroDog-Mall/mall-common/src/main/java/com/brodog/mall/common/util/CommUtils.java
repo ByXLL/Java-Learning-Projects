@@ -5,6 +5,8 @@ import org.springframework.util.DigestUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * 公共工具类
@@ -63,5 +65,19 @@ public class CommUtils {
             ipAddress = "";
         }
         return ipAddress;
+    }
+
+    /**
+     * 字符串转数组
+     * @param str       源字符串
+     * @return          字符串数组
+     */
+    public static ArrayList<String> stringToList(String str) {
+        ArrayList<String> newList = new ArrayList<>();
+        if(!str.isEmpty()) {
+            String[] list = str.split(",");
+            newList.addAll(Arrays.asList(list));
+        }
+        return newList;
     }
 }
