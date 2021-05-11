@@ -1,10 +1,12 @@
 package com.brodog.mall.common.entity;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
-import com.baomidou.mybatisplus.annotation.TableId;
+
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -58,5 +60,15 @@ public class GoodsSku implements Serializable {
     @ApiModelProperty(value = "sku json数据")
     private String data;
 
+    @ApiModelProperty(value = "是否删除， 0 否，1 是")
+    @TableLogic
+    private Integer isDel;
 
+    @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+
+    @ApiModelProperty(value = "修改时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 }

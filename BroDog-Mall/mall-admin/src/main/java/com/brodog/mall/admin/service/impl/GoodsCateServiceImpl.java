@@ -3,8 +3,8 @@ package com.brodog.mall.admin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.brodog.mall.admin.dto.goods.GoodsCateDto;
-import com.brodog.mall.admin.mapper.GoodsBrandMapper;
+import com.brodog.mall.admin.dto.goods.GoodsCateAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsCateEditDto;
 import com.brodog.mall.admin.vo.goods.GoodsCateVO;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.GoodsCate;
@@ -37,9 +37,9 @@ public class GoodsCateServiceImpl extends ServiceImpl<GoodsCateMapper, GoodsCate
     }
 
     @Override
-    public ApiResult insert(GoodsCateDto goodsCateDto) {
+    public ApiResult insert(GoodsCateAddDto goodsCateAddDto) {
         GoodsCate goodsCate = new GoodsCate();
-        BeanUtils.copyProperties(goodsCateDto,goodsCate);
+        BeanUtils.copyProperties(goodsCateAddDto,goodsCate);
         if(goodsCate.getLevel() == null) { goodsCate.setLevel(1); }
         if(goodsCate.getIsShow() == null) { goodsCate.setIsShow(1); }
         if(goodsCate.getIsMenu() == null) { goodsCate.setIsMenu(1); }
@@ -60,10 +60,10 @@ public class GoodsCateServiceImpl extends ServiceImpl<GoodsCateMapper, GoodsCate
     }
 
     @Override
-    public ApiResult update(GoodsCateDto goodsCateDto) {
-        GoodsCate goodsCate = goodsCateMapper.selectById(goodsCateDto.getId());
+    public ApiResult update(GoodsCateEditDto goodsCateEditDto) {
+        GoodsCate goodsCate = goodsCateMapper.selectById(goodsCateEditDto.getId());
         if(goodsCate == null) { throw new OperationalException(); }
-        BeanUtils.copyProperties(goodsCateDto,goodsCate);
+        BeanUtils.copyProperties(goodsCateEditDto,goodsCate);
         int row = goodsCateMapper.updateById(goodsCate);
         if(row>0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();

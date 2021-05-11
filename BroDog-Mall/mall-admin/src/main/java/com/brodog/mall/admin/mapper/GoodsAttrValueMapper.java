@@ -20,12 +20,6 @@ import org.springframework.stereotype.Repository;
  * @since 2021-04-21
  */
 @Repository
-public interface GoodsAttrValueMapper extends BaseMapper<GoodsAttrValue> {
-    /**
-     * 自定义 分页查询 方法
-     * @param page                  分页对象
-     * @param ew                    筛选条件
-     * @return                      分页对象
-     */
-    IPage<GoodsAttrValueVO> selectMyPage(Page<GoodsAttrValueVO> page, @Param(Constants.WRAPPER) QueryWrapper<GoodsAttrValueVO> ew);
+public interface GoodsAttrValueMapper extends IPageInterface<GoodsAttrValue,GoodsAttrValueVO> {
+
 }

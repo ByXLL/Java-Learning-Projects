@@ -3,9 +3,9 @@ package com.brodog.mall.admin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.brodog.mall.admin.dto.goods.GoodsAttrValueDto;
+import com.brodog.mall.admin.dto.goods.GoodsAttrValueAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsAttrValueEditDto;
 import com.brodog.mall.admin.vo.goods.GoodsAttrValueVO;
-import com.brodog.mall.admin.vo.goods.GoodsSpecVO;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.GoodsAttrValue;
 import com.brodog.mall.admin.mapper.GoodsAttrValueMapper;
@@ -38,9 +38,9 @@ public class GoodsAttrValueServiceImpl extends ServiceImpl<GoodsAttrValueMapper,
     }
 
     @Override
-    public ApiResult insert(GoodsAttrValueDto goodsAttrValueDto) {
+    public ApiResult insert(GoodsAttrValueAddDto goodsAttrValueAddDto) {
         GoodsAttrValue goodsAttrValue = new GoodsAttrValue();
-        BeanUtils.copyProperties(goodsAttrValueDto,goodsAttrValue);
+        BeanUtils.copyProperties(goodsAttrValueAddDto,goodsAttrValue);
         goodsAttrValue.setIsDel(0);
         int row = mapper.insert(goodsAttrValue);
         if(row > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
@@ -58,11 +58,11 @@ public class GoodsAttrValueServiceImpl extends ServiceImpl<GoodsAttrValueMapper,
     }
 
     @Override
-    public ApiResult update(GoodsAttrValueDto goodsAttrValueDto) {
-        if(goodsAttrValueDto == null) { throw new ArgException(); }
-        GoodsAttrValue goodsAttrValue = mapper.selectById(goodsAttrValueDto.getId());
+    public ApiResult update(GoodsAttrValueEditDto goodsAttrValueEditDto) {
+        if(goodsAttrValueEditDto == null) { throw new ArgException(); }
+        GoodsAttrValue goodsAttrValue = mapper.selectById(goodsAttrValueEditDto.getId());
         if(goodsAttrValue == null) { throw new OperationalException(); }
-        BeanUtils.copyProperties(goodsAttrValueDto,goodsAttrValue);
+        BeanUtils.copyProperties(goodsAttrValueEditDto,goodsAttrValue);
         int row = mapper.updateById(goodsAttrValue);
         if(row > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();
@@ -72,8 +72,8 @@ public class GoodsAttrValueServiceImpl extends ServiceImpl<GoodsAttrValueMapper,
     public ApiResult selectByPage(PagerParam pagerParam) {
         QueryWrapper<GoodsAttrValueVO> queryWrapper = new QueryWrapper<>();
         IPage<GoodsAttrValueVO> page = mapper.selectMyPage(
-                new Page<>(pagerParam.getPage(), pagerParam.getSize()),
-                queryWrapper
+            new Page<>(pagerParam.getPage(), pagerParam.getSize()),
+            queryWrapper
         );
         return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(),page);
     }
@@ -94,12 +94,12 @@ public class GoodsAttrValueServiceImpl extends ServiceImpl<GoodsAttrValueMapper,
         QueryWrapper<GoodsAttrValue> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("goods_attr_id",id);
         List<GoodsAttrValueVO> list = mapper.selectList(queryWrapper).stream().map(item -> new GoodsAttrValueVO(
-                item.getId(),
-                item.getName(),
-                item.getGoodsAttrId(),
-                item.getValueList(),
-                item.getInputType(),
-                item.getSort()
+            item.getId(),
+            item.getName(),
+            item.getGoodsAttrId(),
+            item.getValueList(),
+            item.getInputType(),
+            item.getSort()
         )).collect(Collectors.toList());
         return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), list);
     }

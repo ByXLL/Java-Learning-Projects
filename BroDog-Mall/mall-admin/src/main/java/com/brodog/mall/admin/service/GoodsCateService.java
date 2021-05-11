@@ -1,6 +1,7 @@
 package com.brodog.mall.admin.service;
 
-import com.brodog.mall.admin.dto.goods.GoodsCateDto;
+import com.brodog.mall.admin.dto.goods.GoodsCateAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsCateEditDto;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.GoodsCate;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -17,10 +18,10 @@ import com.brodog.mall.common.entity.PagerParam;
 public interface GoodsCateService extends IService<GoodsCate> {
     /**
      * 添加商品分类
-     * @param goodsCateDto      商品分类dto
-     * @return                  响应数据
+     * @param goodsCateAddDto       商品分类dto
+     * @return                      响应数据
      */
-    ApiResult insert(GoodsCateDto goodsCateDto);
+    ApiResult insert(GoodsCateAddDto goodsCateAddDto);
 
     /**
      * 删除商品分类
@@ -31,10 +32,10 @@ public interface GoodsCateService extends IService<GoodsCate> {
 
     /**
      * 编辑商品分类
-     * @param goodsCateDto      商品分类dto
-     * @return                  响应数据
+     * @param goodsCateEditDto      商品分类dto
+     * @return                      响应数据
      */
-    ApiResult update(GoodsCateDto goodsCateDto);
+    ApiResult update(GoodsCateEditDto goodsCateEditDto);
 
     /**
      * 分页查询 商品分类

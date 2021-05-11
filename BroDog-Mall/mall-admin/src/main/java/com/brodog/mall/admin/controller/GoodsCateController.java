@@ -1,12 +1,11 @@
 package com.brodog.mall.admin.controller;
 
 
-import com.brodog.mall.admin.dto.goods.GoodsCateDto;
+import com.brodog.mall.admin.dto.goods.GoodsCateAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsCateEditDto;
 import com.brodog.mall.admin.service.GoodsCateService;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.PagerParam;
-import com.brodog.mall.common.exception.ArgException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,11 +30,8 @@ public class GoodsCateController {
 
 
     @PostMapping("/add")
-    public ApiResult add(@Valid @RequestBody GoodsCateDto goodsCateDto, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            throw new ArgException();
-        }
-        return goodsCateService.insert(goodsCateDto);
+    public ApiResult add(@Valid @RequestBody GoodsCateAddDto goodsCateAddDto) {
+        return goodsCateService.insert(goodsCateAddDto);
     }
 
     @PostMapping("/del")
@@ -44,8 +40,8 @@ public class GoodsCateController {
     }
 
     @PostMapping("/update")
-    public ApiResult update(@RequestBody GoodsCateDto goodsCateDto) {
-        return goodsCateService.update(goodsCateDto);
+    public ApiResult update(@Valid @RequestBody GoodsCateEditDto goodsCateEditDto) {
+        return goodsCateService.update(goodsCateEditDto);
     }
 
     @GetMapping("/getList")

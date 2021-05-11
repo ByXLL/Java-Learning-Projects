@@ -3,8 +3,8 @@ package com.brodog.mall.admin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.brodog.mall.admin.dto.goods.GoodsSpecDto;
-import com.brodog.mall.admin.vo.goods.GoodsCateVO;
+import com.brodog.mall.admin.dto.goods.GoodsSpecAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsSpecEditDto;
 import com.brodog.mall.admin.vo.goods.GoodsSpecVO;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.GoodsSpec;
@@ -15,12 +15,9 @@ import com.brodog.mall.common.entity.PagerParam;
 import com.brodog.mall.common.enums.HttpCodeEnum;
 import com.brodog.mall.common.exception.ArgException;
 import com.brodog.mall.common.exception.OperationalException;
-import com.brodog.mall.common.util.CommUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,9 +38,9 @@ public class GoodsSpecServiceImpl extends ServiceImpl<GoodsSpecMapper, GoodsSpec
     }
 
     @Override
-    public ApiResult insert(GoodsSpecDto goodsSpecDto) {
+    public ApiResult insert(GoodsSpecAddDto goodsSpecAddDto) {
         GoodsSpec goodsSpec = new GoodsSpec();
-        BeanUtils.copyProperties(goodsSpecDto,goodsSpec);
+        BeanUtils.copyProperties(goodsSpecAddDto,goodsSpec);
         goodsSpec.setIsDel(0);
         int row = goodsSpecMapper.insert(goodsSpec);
         if(row >0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
@@ -61,11 +58,11 @@ public class GoodsSpecServiceImpl extends ServiceImpl<GoodsSpecMapper, GoodsSpec
     }
 
     @Override
-    public ApiResult update(GoodsSpecDto goodsSpecDto) {
-        if(goodsSpecDto == null) { throw new ArgException(); }
-        GoodsSpec goodsSpec = goodsSpecMapper.selectById(goodsSpecDto.getId());
+    public ApiResult update(GoodsSpecEditDto goodsSpecEditDto) {
+        if(goodsSpecEditDto == null) { throw new ArgException(); }
+        GoodsSpec goodsSpec = goodsSpecMapper.selectById(goodsSpecEditDto.getId());
         if(goodsSpec == null) { throw new OperationalException(); }
-        BeanUtils.copyProperties(goodsSpecDto, goodsSpec);
+        BeanUtils.copyProperties(goodsSpecEditDto, goodsSpec);
         int row = goodsSpecMapper.updateById(goodsSpec);
         if(row > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();

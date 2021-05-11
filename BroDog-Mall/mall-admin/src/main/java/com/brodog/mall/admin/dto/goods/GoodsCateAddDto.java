@@ -4,20 +4,18 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * 商品 分类 dto
+ * 商品 分类 新增 dto
  * @author By-Lin
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GoodsCateDto {
-    @ApiModelProperty(value = "商品分类id")
-    private Long id;
-
+public class GoodsCateAddDto {
     @ApiModelProperty(value = "上级分类")
     private Long pid;
 
@@ -56,7 +54,4 @@ public class GoodsCateDto {
 
     @ApiModelProperty(value = "是否导航栏显示，0 否，1 是")
     private Integer isMenu;
-
-    @ApiModelProperty(value = "是否删除，0 否，1 是")
-    private Integer isDel;
 }

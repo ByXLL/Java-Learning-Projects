@@ -1,18 +1,14 @@
 package com.brodog.mall.admin.service;
 
-import com.brodog.mall.admin.dto.goods.GoodsAttrDto;
-import com.brodog.mall.admin.mapper.GoodsAttrMapper;
-import com.brodog.mall.admin.mapper.GoodsBrandMapper;
+import com.brodog.mall.admin.dto.goods.*;
 import com.brodog.mall.admin.service.impl.GoodsAttrServiceImpl;
 import com.brodog.mall.common.entity.ApiResult;
-import com.brodog.mall.common.entity.GoodsAttr;
-import com.brodog.mall.common.entity.GoodsBrand;
+import com.brodog.mall.common.entity.GoodsCate;
+import com.brodog.mall.common.entity.GoodsPics;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 @SpringBootTest
 class GoodsAttrServiceTest {
@@ -21,12 +17,12 @@ class GoodsAttrServiceTest {
 
     @Test
     void insert() {
-        GoodsAttrDto goodsAttrDto = new GoodsAttrDto();
-        goodsAttrDto.setName("test");
-        goodsAttrDto.setSpecCount(100);
-        goodsAttrDto.setAttrCount(100);
-        goodsAttrDto.setIsDel(0);
-        ApiResult row = goodsAttrService.insert(goodsAttrDto);
+        GoodsAttrAddDto goodsAttrAddDto = new GoodsAttrAddDto();
+        goodsAttrAddDto.setName("test");
+        goodsAttrAddDto.setSpecCount(100);
+        goodsAttrAddDto.setAttrCount(100);
+        goodsAttrAddDto.setIsDel(0);
+        ApiResult row = goodsAttrService.insert(goodsAttrAddDto);
         System.out.println();
     }
 
@@ -37,4 +33,21 @@ class GoodsAttrServiceTest {
         System.out.println();
     }
 
+    @Test
+    void copyBean() {
+        GoodsPics goodsPics = new GoodsPics();
+        goodsPics.setId(1L);
+        goodsPics.setGoodsId(1L);
+        goodsPics.setUrl("www.baidu.com");
+        goodsPics.setIsDel(0);
+
+        GoodsPicsEditDto goodsPicsEditDto = new GoodsPicsEditDto();
+        goodsPicsEditDto.setGoodsId(1L);
+        goodsPicsEditDto.setId(1L);
+//        goodsPicsEditDto.setUrl("");
+
+        BeanUtils.copyProperties(goodsPicsEditDto, goodsPics);
+
+        System.out.println();
+    }
 }

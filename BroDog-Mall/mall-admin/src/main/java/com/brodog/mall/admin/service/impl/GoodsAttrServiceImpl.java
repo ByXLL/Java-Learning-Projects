@@ -1,7 +1,8 @@
 package com.brodog.mall.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.brodog.mall.admin.dto.goods.GoodsAttrDto;
+import com.brodog.mall.admin.dto.goods.GoodsAttrAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsAttrEditDto;
 import com.brodog.mall.admin.vo.goods.GoodsAttrVO;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.GoodsAttr;
@@ -36,9 +37,9 @@ public class GoodsAttrServiceImpl extends ServiceImpl<GoodsAttrMapper, GoodsAttr
     }
 
     @Override
-    public ApiResult insert(GoodsAttrDto goodsAttrDto) {
+    public ApiResult insert(GoodsAttrAddDto goodsAttrAddDto) {
         GoodsAttr goodsAttr = new GoodsAttr();
-        BeanUtils.copyProperties(goodsAttrDto,goodsAttr);
+        BeanUtils.copyProperties(goodsAttrAddDto,goodsAttr);
         int row = goodsAttrMapper.insert(goodsAttr);
         if(row > 0) {
             System.out.println(goodsAttr);
@@ -62,10 +63,10 @@ public class GoodsAttrServiceImpl extends ServiceImpl<GoodsAttrMapper, GoodsAttr
     }
 
     @Override
-    public ApiResult update(GoodsAttrDto goodsAttrDto) {
-        GoodsAttr goodsAttr = goodsAttrMapper.selectById(goodsAttrDto.getId());
+    public ApiResult update(GoodsAttrEditDto goodsAttrEditDto) {
+        GoodsAttr goodsAttr = goodsAttrMapper.selectById(goodsAttrEditDto.getId());
         if( goodsAttr == null ) { throw new OperationalException("当前属性不存在");}
-        BeanUtils.copyProperties(goodsAttrDto,goodsAttr);
+        BeanUtils.copyProperties(goodsAttrEditDto,goodsAttr);
         int row = goodsAttrMapper.updateById(goodsAttr);
         if(row > 0) {
             return new ApiResult(HttpCodeEnum.SUCCESS.getCode(),HttpCodeEnum.SUCCESS.getDesc());

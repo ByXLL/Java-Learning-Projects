@@ -1,10 +1,10 @@
 package com.brodog.mall.admin.service;
 
-import com.brodog.mall.admin.dto.goods.GoodsAttrDto;
+import com.brodog.mall.admin.dto.goods.GoodsAttrAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsAttrEditDto;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.GoodsAttr;
-import com.brodog.mall.common.exception.OperationalException;
 
 /**
  * <p>
@@ -17,10 +17,10 @@ import com.brodog.mall.common.exception.OperationalException;
 public interface GoodsAttrService extends IService<GoodsAttr> {
     /**
      * 添加 商品属性
-     * @param goodsAttrDto     商品属性表单
-     * @return                 响应数据
+     * @param goodsAttrAddDtoDto     商品属性添加表单
+     * @return                       响应数据
      */
-    ApiResult insert(GoodsAttrDto goodsAttrDto);
+    ApiResult insert(GoodsAttrAddDto goodsAttrAddDtoDto);
 
     /**
      * 通过 id 删除商品属性
@@ -31,10 +31,10 @@ public interface GoodsAttrService extends IService<GoodsAttr> {
 
     /**
      * 修改 商品属性
-     * @param goodsAttrDto      商品属性dto
-     * @return                  响应数据
+     * @param goodsAttrEditDto      商品属性 编辑dto
+     * @return                      响应数据
      */
-    ApiResult update(GoodsAttrDto goodsAttrDto);
+    ApiResult update(GoodsAttrEditDto goodsAttrEditDto);
 
     /**
      * 查询所有

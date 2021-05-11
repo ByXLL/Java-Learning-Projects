@@ -1,8 +1,6 @@
 package com.brodog.mall.admin.dto.goods;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,22 +10,21 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * 商品属性值 dto
+ * 商品属性值 编辑 dto
  * @author By-Lin
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GoodsAttrValueDto {
+public class GoodsAttrValueEditDto {
     @ApiModelProperty(value = "商品-属性-属性值-id")
+    @NotNull(message = "商品-属性-属性值 id 为空")
     private Long id;
 
     @ApiModelProperty(value = "属性值名称")
-    @NotEmpty(message = "商品规格名称为空")
     private String name;
 
     @ApiModelProperty(value = "商品-属性 id")
-    @NotNull(message = "商品-属性 id 为空")
     private Long goodsAttrId;
 
     @ApiModelProperty(value = "可选值列表，逗号拼接")

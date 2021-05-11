@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -40,6 +42,4 @@ public class GoodsPics implements Serializable {
     @ApiModelProperty(value = "是否删除，0 否，1 是")
     @TableLogic
     private Integer isDel;
-
-
 }

@@ -19,12 +19,5 @@ import org.springframework.stereotype.Repository;
  * @since 2021-04-21
  */
 @Repository
-public interface GoodsCateMapper extends BaseMapper<GoodsCate> {
-    /**
-     * 自定义 分页查询 方法
-     * @param page                  分页对象
-     * @param ew                    筛选条件
-     * @return                      分页对象
-     */
-    IPage<GoodsCateVO> selectMyPage(IPage<GoodsCateVO> page, @Param(Constants.WRAPPER) QueryWrapper<GoodsCateVO> ew);
+public interface GoodsCateMapper extends IPageInterface<GoodsCate,GoodsCateVO> {
 }

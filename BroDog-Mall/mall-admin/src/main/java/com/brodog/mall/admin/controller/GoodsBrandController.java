@@ -1,14 +1,11 @@
 package com.brodog.mall.admin.controller;
 
 
-import com.brodog.mall.admin.dto.goods.GoodsAttrDto;
-import com.brodog.mall.admin.dto.goods.GoodsBrandDto;
+import com.brodog.mall.admin.dto.goods.GoodsBrandAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsBrandEditDto;
 import com.brodog.mall.admin.service.GoodsBrandService;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.PagerParam;
-import com.brodog.mall.common.enums.HttpCodeEnum;
-import com.brodog.mall.common.exception.ArgException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,9 +31,8 @@ public class GoodsBrandController {
     }
 
     @PostMapping("/add")
-    public ApiResult add(@Valid @RequestBody GoodsBrandDto goodsBrandDto, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) { throw new ArgException(); }
-        return goodsBrandService.insert(goodsBrandDto);
+    public ApiResult add(@Valid @RequestBody GoodsBrandAddDto goodsBrandAddDto) {
+        return goodsBrandService.insert(goodsBrandAddDto);
     }
 
     @PostMapping("/del")
@@ -46,8 +42,8 @@ public class GoodsBrandController {
 
 
     @PostMapping("/update")
-    public ApiResult update(@RequestBody GoodsBrandDto goodsBrandDto) {
-        return goodsBrandService.update(goodsBrandDto);
+    public ApiResult update(@Valid @RequestBody GoodsBrandEditDto goodsBrandEditDto) {
+        return goodsBrandService.update(goodsBrandEditDto);
     }
 
     @GetMapping("/getList")

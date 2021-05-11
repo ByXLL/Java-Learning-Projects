@@ -2,9 +2,9 @@ package com.brodog.mall.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.brodog.mall.admin.dto.goods.GoodsBrandDto;
+import com.brodog.mall.admin.dto.goods.GoodsBrandAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsBrandEditDto;
 import com.brodog.mall.admin.vo.goods.GoodsBranVO;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.GoodsBrand;
@@ -18,10 +18,6 @@ import com.brodog.mall.common.exception.OperationalException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
 
 /**
  * <p>
@@ -40,9 +36,9 @@ public class GoodsBrandServiceImpl extends ServiceImpl<GoodsBrandMapper, GoodsBr
     }
 
     @Override
-    public ApiResult insert(GoodsBrandDto goodsBrandDto) {
+    public ApiResult insert(GoodsBrandAddDto goodsBrandAddDto) {
         GoodsBrand goodsBrand = new GoodsBrand();
-        BeanUtils.copyProperties(goodsBrandDto,goodsBrand);
+        BeanUtils.copyProperties(goodsBrandAddDto,goodsBrand);
         int row = goodsBrandMapper.insert(goodsBrand);
         if(row>0){ return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();
@@ -59,10 +55,10 @@ public class GoodsBrandServiceImpl extends ServiceImpl<GoodsBrandMapper, GoodsBr
     }
 
     @Override
-    public ApiResult update(GoodsBrandDto goodsBrandDto) {
-        GoodsBrand goodsBrand = goodsBrandMapper.selectById(goodsBrandDto.getId());
+    public ApiResult update(GoodsBrandEditDto goodsBrandEditDto) {
+        GoodsBrand goodsBrand = goodsBrandMapper.selectById(goodsBrandEditDto.getId());
         if(goodsBrand == null) { throw new OperationalException(); }
-        BeanUtils.copyProperties(goodsBrandDto,goodsBrand);
+        BeanUtils.copyProperties(goodsBrandEditDto,goodsBrand);
         int row = goodsBrandMapper.updateById(goodsBrand);
         if(row >0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();

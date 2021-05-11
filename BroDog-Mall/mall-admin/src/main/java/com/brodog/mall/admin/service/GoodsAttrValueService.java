@@ -1,6 +1,7 @@
 package com.brodog.mall.admin.service;
 
-import com.brodog.mall.admin.dto.goods.GoodsAttrValueDto;
+import com.brodog.mall.admin.dto.goods.GoodsAttrValueAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsAttrValueEditDto;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.GoodsAttrValue;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -17,10 +18,10 @@ import com.brodog.mall.common.entity.PagerParam;
 public interface GoodsAttrValueService extends IService<GoodsAttrValue> {
     /**
      * 添加商品属性值
-     * @param goodsAttrValueDto     商品属性值 dto
-     * @return                      响应数据
+     * @param goodsAttrValueAddDto     商品属性值 dto
+     * @return                         响应数据
      */
-    ApiResult insert(GoodsAttrValueDto goodsAttrValueDto);
+    ApiResult insert(GoodsAttrValueAddDto goodsAttrValueAddDto);
 
     /**
      * 删除 商品属性值
@@ -31,10 +32,10 @@ public interface GoodsAttrValueService extends IService<GoodsAttrValue> {
 
     /**
      * 修改 商品属性值
-     * @param goodsAttrValueDto         商品属性值 dto
-     * @return                         响应数据
+     * @param goodsAttrValueEditDto         商品属性值 dto
+     * @return                              响应数据
      */
-    ApiResult update(GoodsAttrValueDto goodsAttrValueDto);
+    ApiResult update(GoodsAttrValueEditDto goodsAttrValueEditDto);
 
     /**
      * 分页查询

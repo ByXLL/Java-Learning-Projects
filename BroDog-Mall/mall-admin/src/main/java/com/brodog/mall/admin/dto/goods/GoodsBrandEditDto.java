@@ -4,18 +4,19 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
- * 商品品牌 dto
+ * 商品品牌 编辑 dto
  * @author By-Lin
  */
 @Data
-public class GoodsBrandDto {
+public class GoodsBrandEditDto {
     @ApiModelProperty(value = "品牌id")
+    @NotNull(message = "品牌id 为空")
     private Long id;
 
     @ApiModelProperty(value = "品牌名称")
-    @NotEmpty(message = "品牌名称为空")
     private String name;
 
     @ApiModelProperty(value = "品牌首字母")
@@ -28,11 +29,9 @@ public class GoodsBrandDto {
     private Integer isShow;
 
     @ApiModelProperty(value = "logo")
-    @NotEmpty(message = "logo为空")
     private String logo;
 
     @ApiModelProperty(value = "品牌专区 图片")
-    @NotEmpty(message = "品牌专区图片为空")
     private String bigPic;
 
     @ApiModelProperty(value = "是否删除")

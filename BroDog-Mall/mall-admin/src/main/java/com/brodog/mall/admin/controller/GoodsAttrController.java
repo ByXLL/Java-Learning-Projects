@@ -1,12 +1,11 @@
 package com.brodog.mall.admin.controller;
 
 
-import com.brodog.mall.admin.dto.goods.GoodsAttrDto;
+import com.brodog.mall.admin.dto.goods.GoodsAttrAddDto;
+import com.brodog.mall.admin.dto.goods.GoodsAttrEditDto;
 import com.brodog.mall.admin.service.impl.GoodsAttrServiceImpl;
 import com.brodog.mall.common.entity.ApiResult;
-import com.brodog.mall.common.exception.ArgException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,13 +31,8 @@ public class GoodsAttrController {
     }
 
     @PostMapping("/add")
-    public ApiResult add(@Valid @RequestBody GoodsAttrDto goodsAttrDto, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            System.out.println(goodsAttrDto);
-            log.warn("【添加商品参数】 参数错误,goodsAttrForm={}", goodsAttrDto);
-            throw new ArgException("参数异常");
-        }
-        return goodsAttrService.insert(goodsAttrDto);
+    public ApiResult add(@Valid @RequestBody GoodsAttrAddDto goodsAttrAddDto) {
+        return goodsAttrService.insert(goodsAttrAddDto);
     }
 
     @PostMapping("/del")
@@ -47,8 +41,8 @@ public class GoodsAttrController {
     }
 
     @PostMapping("/update")
-    public ApiResult update(@RequestBody GoodsAttrDto goodsAttrDto) {
-        return goodsAttrService.update(goodsAttrDto);
+    public ApiResult update(@Valid @RequestBody GoodsAttrEditDto goodsAttrEditDto) {
+        return goodsAttrService.update(goodsAttrEditDto);
     }
 
     @GetMapping("/listByName")

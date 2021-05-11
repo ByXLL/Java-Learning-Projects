@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.brodog.mall.admin.mapper.GoodsMapper">
 
+    <select id="selectMyPage" resultType="com.brodog.mall.admin.vo.goods.GoodsVO">
+        select * from goods <where>${ew.sqlSegment}</where>
+    </select>
 </mapper>

@@ -6,16 +6,16 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * 商品规格 dto
+ * 商品规格 编辑 dto
  * @author By-Lin
  */
 @Data
-public class GoodsSpecDto {
+public class GoodsSpecEditDto {
     @ApiModelProperty(value = "商品-规格-id")
+    @NotNull(message = "商品-规格-id 为空")
     private Long id;
 
     @ApiModelProperty(value = "商品规格名称")
-    @NotEmpty(message = "商品规格名称为空")
     private String name;
 
     @ApiModelProperty(value = "商品-属性 id")
