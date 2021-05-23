@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class GoodsSkuAddDto {
     @ApiModelProperty(value = "商品id")
-    @NotNull(message = "商品id 为空")
+//    @NotNull(message = "商品id 为空")
     private Long goodsId;
 
     @ApiModelProperty(value = "sku 编号")

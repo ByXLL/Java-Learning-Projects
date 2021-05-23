@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 public class GoodsBranVO {
-    @ApiModelProperty(value = "品牌名称")
+    @ApiModelProperty(value = "品牌id")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 

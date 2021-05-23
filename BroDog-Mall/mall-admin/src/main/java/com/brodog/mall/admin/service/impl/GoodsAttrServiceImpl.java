@@ -1,14 +1,18 @@
 package com.brodog.mall.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.brodog.mall.admin.dto.goods.GoodsAttrAddDto;
 import com.brodog.mall.admin.dto.goods.GoodsAttrEditDto;
 import com.brodog.mall.admin.vo.goods.GoodsAttrVO;
+import com.brodog.mall.admin.vo.goods.GoodsBranVO;
 import com.brodog.mall.common.entity.ApiResult;
 import com.brodog.mall.common.entity.GoodsAttr;
 import com.brodog.mall.admin.mapper.GoodsAttrMapper;
 import com.brodog.mall.admin.service.GoodsAttrService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.brodog.mall.common.entity.PagerParam;
 import com.brodog.mall.common.enums.HttpCodeEnum;
 import com.brodog.mall.common.exception.ArgException;
 import com.brodog.mall.common.exception.OperationalException;
@@ -106,7 +110,24 @@ public class GoodsAttrServiceImpl extends ServiceImpl<GoodsAttrMapper, GoodsAttr
     public ApiResult selectById(Long id) {
         if(id == null) { throw new ArgException(); }
         GoodsAttr goodsAttr = goodsAttrMapper.selectById(id);
-        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), goodsAttr);
+        if(goodsAttr == null) { throw new OperationalException(); }
+        GoodsAttrVO goodsAttrVO = new GoodsAttrVO();
+        BeanUtils.copyProperties(goodsAttr,goodsAttrVO);
+        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), goodsAttrVO);
+    }
+
+    @Override
+    public ApiResult selectByPage(PagerParam pagerParam, String name) {
+        QueryWrapper<GoodsAttrVO> queryWrapper = new QueryWrapper<>();
+        if (!StringUtils.isBlank(name)) {
+            queryWrapper.like("name",name);
+        }
+        queryWrapper.eq("is_del",0);
+        IPage<GoodsAttrVO> mapPage = goodsAttrMapper.selectMyPage(
+            new Page<>(pagerParam.getPage(), pagerParam.getSize()),
+            queryWrapper
+        );
+        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), mapPage);
     }
 
 }

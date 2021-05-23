@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -13,6 +14,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class GoodsAttrVO {
     @ApiModelProperty(value = "商品-属性id")
     @JsonSerialize(using= ToStringSerializer.class)
@@ -21,7 +23,7 @@ public class GoodsAttrVO {
     @ApiModelProperty(value = "属性名称")
     private String name;
 
-    @ApiModelProperty(value = "属性个数")
+    @ApiModelProperty(value = "属性值个数")
     private Integer attrCount;
 
     @ApiModelProperty(value = "规格个数")

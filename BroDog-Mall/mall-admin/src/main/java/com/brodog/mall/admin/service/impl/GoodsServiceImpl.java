@@ -50,7 +50,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = OperationalException.class)
     public ApiResult addGoods(GoodsAddForm goodsAddForm) {
         GoodsAddDto goodsAddDto = goodsAddForm.getGoodsBasisInfo();
         GoodsDescAddDto goodsDescAddDto = goodsAddForm.getGoodsDescInfo();
@@ -96,7 +96,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = OperationalException.class)
     public ApiResult editGoods(GoodsEditForm goodsEditForm) {
         GoodsEditDto goodsEditDto = goodsEditForm.getGoodsBasisInfo();
         GoodsDescEditDto goodsDescEditDto = goodsEditForm.getGoodsDescInfo();

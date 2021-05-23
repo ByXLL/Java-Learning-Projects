@@ -23,7 +23,11 @@ public class GoodsAttrValueVO {
     private String name;
 
     @ApiModelProperty(value = "商品-属性 id")
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long goodsAttrId;
+
+    @ApiModelProperty(value = "商品-属性 属性名")
+    private String goodsAttrName;
 
     @ApiModelProperty(value = "可选值列表，逗号拼接")
     private String valueList;

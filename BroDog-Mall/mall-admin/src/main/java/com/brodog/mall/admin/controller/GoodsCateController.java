@@ -44,7 +44,7 @@ public class GoodsCateController {
         return goodsCateService.update(goodsCateEditDto);
     }
 
-    @GetMapping("/getList")
+    @GetMapping("/list")
     public ApiResult selectPage(PagerParam pagerParam, @PathParam("name") String name) {
         return goodsCateService.selectByPage(pagerParam, name);
     }

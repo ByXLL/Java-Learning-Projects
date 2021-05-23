@@ -3,7 +3,6 @@
 <mapper namespace="com.brodog.mall.admin.mapper.GoodsCateMapper">
 
     <select id="selectMyPage" resultType="com.brodog.mall.admin.vo.goods.GoodsCateVO">
-        SELECT * FROM goods_cate
-        <where>${ew.sqlSegment}</where>
+        SELECT * FROM goods_cate <where>${ew.sqlSegment}</where>
     </select>
 </mapper>

@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class GoodsAttrValueAddDto {
     @ApiModelProperty(value = "属性值名称")
-    @NotEmpty(message = "商品规格名称为空")
+    @NotEmpty(message = "商品属性值名称为空")
     private String name;
 
     @ApiModelProperty(value = "商品-属性 id")

@@ -47,19 +47,19 @@ public class GoodsSkuController {
         return service.update(goodsSkuEditDto);
     }
 
-    @GetMapping("/get")
+    @GetMapping("/getById")
     public ApiResult selectById(@PathParam("id") Long id) {
         return service.selectById(id);
     }
-//
-//    @GetMapping("/get")
-//    public ApiResult selectByGoodsId(@PathParam("goodsId") Long goodsId) {
-//        return service.selectByGoodsId(goodsId);
-//    }
-//
-//    @GetMapping("/get")
-//    public ApiResult selectBySkuNumber(@PathParam("skuNumber") Integer skuNumber) {
-//        return service.selectBySkuNumber(skuNumber);
-//    }
+
+    @GetMapping("/getByGoodsId")
+    public ApiResult selectByGoodsId(@PathParam("goodsId") Long goodsId) {
+        return service.selectByGoodsId(goodsId);
+    }
+
+    @GetMapping("/getBySkuNumber")
+    public ApiResult selectBySkuNumber(@PathParam("skuNumber") Integer skuNumber) {
+        return service.selectBySkuNumber(skuNumber);
+    }
 }
 

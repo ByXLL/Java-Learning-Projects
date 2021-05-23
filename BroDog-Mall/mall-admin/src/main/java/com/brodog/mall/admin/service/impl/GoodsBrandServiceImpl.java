@@ -81,6 +81,7 @@ public class GoodsBrandServiceImpl extends ServiceImpl<GoodsBrandMapper, GoodsBr
         if (!StringUtils.isBlank(name)) {
             queryWrapper.like("name",name);
         }
+        queryWrapper.eq("is_del",0);
         IPage<GoodsBranVO> mapPage = goodsBrandMapper.selectMyPage(
             new Page<>(pagerParam.getPage(), pagerParam.getSize()),
             queryWrapper

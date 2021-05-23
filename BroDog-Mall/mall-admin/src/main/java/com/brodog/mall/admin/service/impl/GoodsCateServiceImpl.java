@@ -19,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 商品分类 服务实现类
@@ -54,6 +56,10 @@ public class GoodsCateServiceImpl extends ServiceImpl<GoodsCateMapper, GoodsCate
         if(id == null) { throw new ArgException("参数异常"); }
         GoodsCate goodsCate = goodsCateMapper.selectById(id);
         if(goodsCate == null) { throw new OperationalException(); }
+        QueryWrapper<GoodsCate> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("pid",id);
+        Integer count = goodsCateMapper.selectCount(queryWrapper);
+        if(count>0) { return new ApiResult(HttpCodeEnum.ERROR.getCode(), "操作失败，当前分类下存在子分类"); }
         int row = goodsCateMapper.deleteById(id);
         if(row > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();
@@ -75,6 +81,7 @@ public class GoodsCateServiceImpl extends ServiceImpl<GoodsCateMapper, GoodsCate
         if(!StringUtils.isBlank(name)) {
             queryWrapper.like("name", name);
         }
+        queryWrapper.eq("is_del", 0);
         IPage<GoodsCateVO> mapPage = goodsCateMapper.selectMyPage(
             new Page<>(pagerParam.getPage(),pagerParam.getSize()),
             queryWrapper

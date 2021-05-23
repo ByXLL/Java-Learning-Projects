@@ -5,6 +5,7 @@ import com.brodog.mall.admin.dto.goods.GoodsAttrAddDto;
 import com.brodog.mall.admin.dto.goods.GoodsAttrEditDto;
 import com.brodog.mall.admin.service.impl.GoodsAttrServiceImpl;
 import com.brodog.mall.common.entity.ApiResult;
+import com.brodog.mall.common.entity.PagerParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,8 @@ public class GoodsAttrController {
     }
 
     @PostMapping("/del")
-    public ApiResult delete(@PathParam("id") Long goodsAttrId) {
-        return goodsAttrService.delete(goodsAttrId);
+    public ApiResult delete(@PathParam("id") Long id) {
+        return goodsAttrService.delete(id);
     }
 
     @PostMapping("/update")
@@ -51,13 +52,13 @@ public class GoodsAttrController {
     }
 
     @GetMapping("/list")
-    public ApiResult selectAll() {
-        return goodsAttrService.selectAll();
+    public ApiResult selectAll(PagerParam pagerParam, String name) {
+        return goodsAttrService.selectByPage(pagerParam, name);
     }
 
     @GetMapping("/getById")
-    public ApiResult selectById(@PathParam("id") Long goodsAttrId) {
-        return goodsAttrService.selectById(goodsAttrId);
+    public ApiResult selectById(@PathParam("id") Long id) {
+        return goodsAttrService.selectById(id);
     }
 }
 

@@ -44,7 +44,7 @@ public class GoodsAttrValueController {
         return service.update(goodsAttrValueEditDto);
     }
 
-    @GetMapping("/getList")
+    @GetMapping("/list")
     public ApiResult selectPage(PagerParam pagerParam) {
         return service.selectByPage(pagerParam);
     }

@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.brodog.mall.admin.dto.goods.GoodsAttrValueAddDto;
 import com.brodog.mall.admin.dto.goods.GoodsAttrValueEditDto;
+import com.brodog.mall.admin.mapper.GoodsAttrMapper;
 import com.brodog.mall.admin.vo.goods.GoodsAttrValueVO;
 import com.brodog.mall.common.entity.ApiResult;
+import com.brodog.mall.common.entity.GoodsAttr;
 import com.brodog.mall.common.entity.GoodsAttrValue;
 import com.brodog.mall.admin.mapper.GoodsAttrValueMapper;
 import com.brodog.mall.admin.service.GoodsAttrValueService;
@@ -17,6 +19,7 @@ import com.brodog.mall.common.exception.ArgException;
 import com.brodog.mall.common.exception.OperationalException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,18 +35,24 @@ import java.util.stream.Collectors;
 @Service
 public class GoodsAttrValueServiceImpl extends ServiceImpl<GoodsAttrValueMapper, GoodsAttrValue> implements GoodsAttrValueService {
     private final GoodsAttrValueMapper mapper;
+    private final GoodsAttrMapper goodsAttrMapper;
 
-    public GoodsAttrValueServiceImpl(GoodsAttrValueMapper mapper) {
+    public GoodsAttrValueServiceImpl(GoodsAttrValueMapper mapper, GoodsAttrMapper goodsAttrMapper) {
         this.mapper = mapper;
+        this.goodsAttrMapper = goodsAttrMapper;
     }
 
     @Override
+    @Transactional(rollbackFor = OperationalException.class)
     public ApiResult insert(GoodsAttrValueAddDto goodsAttrValueAddDto) {
         GoodsAttrValue goodsAttrValue = new GoodsAttrValue();
         BeanUtils.copyProperties(goodsAttrValueAddDto,goodsAttrValue);
         goodsAttrValue.setIsDel(0);
-        int row = mapper.insert(goodsAttrValue);
-        if(row > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
+        int row1 = mapper.insert(goodsAttrValue);
+        GoodsAttr goodsAttr = goodsAttrMapper.selectById(goodsAttrValueAddDto.getGoodsAttrId());
+        goodsAttr.setAttrCount(goodsAttr.getAttrCount() +1);
+        int row2 = goodsAttrMapper.updateById(goodsAttr);
+        if(row1 > 0 && row2 > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();
     }
 
@@ -91,12 +100,15 @@ public class GoodsAttrValueServiceImpl extends ServiceImpl<GoodsAttrValueMapper,
     @Override
     public ApiResult selectByAttrId(Long id) {
         if(id == null) { throw new ArgException(); }
+        GoodsAttr goodsAttr = goodsAttrMapper.selectById(id);
+        if(goodsAttr == null) { throw new OperationalException("商品属性不存在"); }
         QueryWrapper<GoodsAttrValue> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("goods_attr_id",id);
         List<GoodsAttrValueVO> list = mapper.selectList(queryWrapper).stream().map(item -> new GoodsAttrValueVO(
             item.getId(),
             item.getName(),
             item.getGoodsAttrId(),
+            goodsAttr.getName(),
             item.getValueList(),
             item.getInputType(),
             item.getSort()
