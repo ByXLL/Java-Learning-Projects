@@ -5,9 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.brodog.mall.admin.dto.goods.GoodsAttrAddDto;
 import com.brodog.mall.admin.dto.goods.GoodsAttrEditDto;
+import com.brodog.mall.admin.mapper.GoodsAttrCateMapper;
 import com.brodog.mall.admin.vo.goods.GoodsAttrVO;
-import com.brodog.mall.admin.vo.goods.GoodsBranVO;
 import com.brodog.mall.common.entity.ApiResult;
+import com.brodog.mall.common.entity.GoodsAttrCate;
 import com.brodog.mall.common.entity.GoodsAttr;
 import com.brodog.mall.admin.mapper.GoodsAttrMapper;
 import com.brodog.mall.admin.service.GoodsAttrService;
@@ -16,16 +17,16 @@ import com.brodog.mall.common.entity.PagerParam;
 import com.brodog.mall.common.enums.HttpCodeEnum;
 import com.brodog.mall.common.exception.ArgException;
 import com.brodog.mall.common.exception.OperationalException;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * <p>
- * 商品-属性 服务实现类
+ * 商品属性表 服务实现类
  * </p>
  *
  * @author By-Lin
@@ -33,77 +34,64 @@ import java.util.stream.Collectors;
  */
 @Service
 public class GoodsAttrServiceImpl extends ServiceImpl<GoodsAttrMapper, GoodsAttr> implements GoodsAttrService {
-
     private final GoodsAttrMapper goodsAttrMapper;
+    private final GoodsAttrCateMapper goodsAttrCateMapper;
 
-    public GoodsAttrServiceImpl(GoodsAttrMapper goodsAttrMapper) {
+    public GoodsAttrServiceImpl(GoodsAttrMapper goodsAttrMapper, GoodsAttrCateMapper goodsAttrCateMapper) {
         this.goodsAttrMapper = goodsAttrMapper;
+        this.goodsAttrCateMapper = goodsAttrCateMapper;
     }
 
     @Override
+    @Transactional(rollbackFor = OperationalException.class)
     public ApiResult insert(GoodsAttrAddDto goodsAttrAddDto) {
         GoodsAttr goodsAttr = new GoodsAttr();
-        BeanUtils.copyProperties(goodsAttrAddDto,goodsAttr);
-        int row = goodsAttrMapper.insert(goodsAttr);
-        if(row > 0) {
-            System.out.println(goodsAttr);
-            return new ApiResult(HttpCodeEnum.SUCCESS.getCode(),HttpCodeEnum.SUCCESS.getDesc(), goodsAttr);
-        }
-        return new ApiResult(HttpCodeEnum.ERROR.getCode(), HttpCodeEnum.ERROR.getDesc());
+        BeanUtils.copyProperties(goodsAttrAddDto, goodsAttr);
+        goodsAttr.setIsDel(0);
+        int row1 = goodsAttrMapper.insert(goodsAttr);
+        GoodsAttrCate goodsAttrCate = goodsAttrCateMapper.selectById(goodsAttrAddDto.getGoodsAttrCateId());
+        goodsAttrCate.setAttrCount(goodsAttrCate.getAttrCount() +1);
+        int row2 = goodsAttrCateMapper.updateById(goodsAttrCate);
+        if(row1 > 0 && row2 > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
+        throw new OperationalException();
     }
 
     @Override
-    public ApiResult delete(Long goodsAttrId){
-        if(goodsAttrId == null) { throw new ArgException(); }
-        GoodsAttr goodsAttr = goodsAttrMapper.selectById(goodsAttrId);
-        if( goodsAttr == null ) { throw new OperationalException("当前属性不存在");}
-        if(
-            goodsAttr.getAttrCount() != 0 ||
-            goodsAttr.getSpecCount() != 0
-        ) { return new ApiResult(HttpCodeEnum.ERROR.getCode(), "该属性分类下存在商品，删除失败");}
-        int row = goodsAttrMapper.deleteById(goodsAttrId);
-        if(row>0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
+    @Transactional(rollbackFor = OperationalException.class)
+    public ApiResult delete(Long id) {
+        if(id == null) { throw new ArgException(); }
+        GoodsAttr goodsAttr = goodsAttrMapper.selectById(id);
+        if(goodsAttr == null) { throw new OperationalException(); }
+        GoodsAttrCate goodsAttrCate = goodsAttrCateMapper.selectById(goodsAttr.getGoodsAttrCateId());
+        int count = goodsAttrCate.getAttrCount();
+        if(count >= 1) { count--; }
+        else { count=0; }
+        goodsAttrCate.setAttrCount(count);
+        int row1 = goodsAttrMapper.deleteById(id);
+        int row2 = goodsAttrCateMapper.updateById(goodsAttrCate);
+        if(row1>0 && row2 > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();
     }
 
     @Override
     public ApiResult update(GoodsAttrEditDto goodsAttrEditDto) {
+        if(goodsAttrEditDto == null) { throw new ArgException(); }
         GoodsAttr goodsAttr = goodsAttrMapper.selectById(goodsAttrEditDto.getId());
-        if( goodsAttr == null ) { throw new OperationalException("当前属性不存在");}
-        BeanUtils.copyProperties(goodsAttrEditDto,goodsAttr);
+        if(goodsAttr == null) { throw new OperationalException(); }
+        BeanUtils.copyProperties(goodsAttrEditDto, goodsAttr);
         int row = goodsAttrMapper.updateById(goodsAttr);
-        if(row > 0) {
-            return new ApiResult(HttpCodeEnum.SUCCESS.getCode(),HttpCodeEnum.SUCCESS.getDesc());
-        }
+        if(row > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();
     }
 
     @Override
-    public ApiResult selectAll() {
-        List<GoodsAttrVO> goodsAttrVOList = goodsAttrMapper.selectList(null).stream().map(item -> new GoodsAttrVO(
-                item.getId(),
-                item.getName(),
-                item.getAttrCount(),
-                item.getSpecCount()
-        )).collect(Collectors.toList());
-        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), goodsAttrVOList);
-    }
-
-    @Override
-    public ApiResult selectByName(String name) {
-        QueryWrapper<GoodsAttr> queryWrapper = new QueryWrapper<>();
-        if(StringUtils.isBlank(name)) {
-            queryWrapper = null;
-        }else {
-            queryWrapper.like("name",name);
-        }
-        List<GoodsAttrVO> goodsAttrVOList = goodsAttrMapper.selectList(queryWrapper).stream().map(item -> new GoodsAttrVO(
-            item.getId(),
-            item.getName(),
-            item.getAttrCount(),
-            item.getSpecCount()
-        )).collect(Collectors.toList());
-        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), goodsAttrVOList);
+    public ApiResult selectByPage(PagerParam pagerParam) {
+        QueryWrapper<GoodsAttrVO> queryWrapper = new QueryWrapper<>();
+        IPage<GoodsAttrVO> page = goodsAttrMapper.selectMyPage(
+            new Page<>(pagerParam.getPage(), pagerParam.getSize()),
+            queryWrapper
+        );
+        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(),page);
     }
 
     @Override
@@ -112,22 +100,26 @@ public class GoodsAttrServiceImpl extends ServiceImpl<GoodsAttrMapper, GoodsAttr
         GoodsAttr goodsAttr = goodsAttrMapper.selectById(id);
         if(goodsAttr == null) { throw new OperationalException(); }
         GoodsAttrVO goodsAttrVO = new GoodsAttrVO();
-        BeanUtils.copyProperties(goodsAttr,goodsAttrVO);
+        BeanUtils.copyProperties(goodsAttr, goodsAttrVO);
         return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), goodsAttrVO);
     }
 
     @Override
-    public ApiResult selectByPage(PagerParam pagerParam, String name) {
-        QueryWrapper<GoodsAttrVO> queryWrapper = new QueryWrapper<>();
-        if (!StringUtils.isBlank(name)) {
-            queryWrapper.like("name",name);
-        }
-        queryWrapper.eq("is_del",0);
-        IPage<GoodsAttrVO> mapPage = goodsAttrMapper.selectMyPage(
-            new Page<>(pagerParam.getPage(), pagerParam.getSize()),
-            queryWrapper
-        );
-        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), mapPage);
+    public ApiResult selectByAttrCateId(Long id) {
+        if(id == null) { throw new ArgException(); }
+        GoodsAttrCate goodsAttrCate = goodsAttrCateMapper.selectById(id);
+        if(goodsAttrCate == null) { throw new OperationalException("商品属性分类不存在"); }
+        QueryWrapper<GoodsAttr> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("goods_attr_cate_id",id);
+        List<GoodsAttrVO> list = goodsAttrMapper.selectList(queryWrapper).stream().map(item -> new GoodsAttrVO(
+            item.getId(),
+            item.getName(),
+            item.getGoodsAttrCateId(),
+            goodsAttrCate.getName(),
+            item.getValueList(),
+            item.getInputType(),
+            item.getSort()
+        )).collect(Collectors.toList());
+        return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), list);
     }
-
 }

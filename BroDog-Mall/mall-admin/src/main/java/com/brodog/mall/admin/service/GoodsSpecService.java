@@ -18,7 +18,7 @@ import com.brodog.mall.common.entity.PagerParam;
 public interface GoodsSpecService extends IService<GoodsSpec> {
     /***
      * 添加 商品规格
-     * @param goodsSpecAddDto      商品规格dto
+     * @param goodsSpecAddDto      商品规格添加dto
      * @return                     响应数据
      */
     ApiResult insert(GoodsSpecAddDto goodsSpecAddDto);
@@ -32,7 +32,7 @@ public interface GoodsSpecService extends IService<GoodsSpec> {
 
     /**
      * 修改商品规格
-     * @param goodsSpecEditDto      商品规格dto
+     * @param goodsSpecEditDto      商品规格编辑dto
      * @return                      响应数据
      */
     ApiResult update(GoodsSpecEditDto goodsSpecEditDto);
@@ -52,9 +52,9 @@ public interface GoodsSpecService extends IService<GoodsSpec> {
     ApiResult selectById(Long id);
 
     /**
-     * 通过 属性id 获取属性值
-     * @param id        属性id
-     * @return          响应数据
+     * 通过 属性分类id 获取属性值
+     * @param attrCateId        属性分类id
+     * @return                  响应数据
      */
-    ApiResult selectByAttrId(Long id);
+    ApiResult selectByAttrCateId(Long attrCateId);
 }

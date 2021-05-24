@@ -24,9 +24,9 @@ public class GoodsSpecVO {
     @ApiModelProperty(value = "商品规格名称")
     private String name;
 
-    @ApiModelProperty(value = "商品-属性 id")
+    @ApiModelProperty(value = "商品-属性分类 id")
     @JsonSerialize(using= ToStringSerializer.class)
-    private Long goodsAttrId;
+    private Long goodsAttrCateId;
 
 //    @ApiModelProperty(value = "可选值列表")
 //    private ArrayList<String> valueList;

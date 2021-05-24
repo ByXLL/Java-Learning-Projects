@@ -1,6 +1,5 @@
 package com.brodog.mall.admin.dto.goods;
 
-
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,27 +9,21 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * 商品属性值 添加 dto
+ * 商品属性值 添加dto
  * @author By-Lin
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class GoodsAttrValueAddDto {
-    @ApiModelProperty(value = "属性值名称")
-    @NotEmpty(message = "商品属性值名称为空")
-    private String name;
+    @ApiModelProperty(value = "商品id",required = true)
+//    @NotNull(message = "商品id为空")
+    private Long goodsId;
 
-    @ApiModelProperty(value = "商品-属性 id")
-    @NotNull(message = "商品-属性 id 为空")
+    @ApiModelProperty(value = "商品属性 id",required = true)
+    @NotNull(message = "商品属性id 为空")
     private Long goodsAttrId;
 
-    @ApiModelProperty(value = "可选值列表，逗号拼接")
-    private String valueList;
-
-    @ApiModelProperty(value = "属性值录入方式，0 手动，1 列表选择")
-    private Integer inputType;
-
-    @ApiModelProperty(value = "排序")
-    private Integer sort;
+    @ApiModelProperty(value = "属性值",required = true)
+    private String value;
 }

@@ -1,6 +1,8 @@
 package com.brodog.mall.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import java.sql.Timestamp;
+import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -10,42 +12,44 @@ import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 商品-属性
+ * 商品属性表
  * </p>
  *
  * @author By-Lin
  * @since 2021-04-21
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="GoodsAttr对象", description="商品-属性")
+@ApiModel(value="GoodsAttr对象", description="商品属性表")
 public class GoodsAttr implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "商品-属性id")
+    @ApiModelProperty(value = "商品-属性-id")
     @TableId(value = "id", type = IdType.ID_WORKER)
     private Long id;
 
     @ApiModelProperty(value = "属性名称")
     private String name;
 
-    @ApiModelProperty(value = "属性个数")
-    private Integer attrCount;
+    @ApiModelProperty(value = "商品-属性分类 id")
+    private Long goodsAttrCateId;
 
-    @ApiModelProperty(value = "规格个数")
-    private Integer specCount;
+    @ApiModelProperty(value = "可选值列表，逗号拼接")
+    private String valueList;
+
+    @ApiModelProperty(value = "可选值录入方式，0 手动，1 列表选择")
+    private Integer inputType;
+
+    @ApiModelProperty(value = "排序")
+    private Integer sort;
 
     @ApiModelProperty(value = "是否删除，0 否，1 是")
     @TableLogic

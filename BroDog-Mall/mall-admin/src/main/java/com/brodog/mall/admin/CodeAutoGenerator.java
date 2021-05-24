@@ -70,17 +70,18 @@ public class CodeAutoGenerator {
         StrategyConfig strategy = new StrategyConfig();
         // 自动映射的表集合
         strategy.setInclude(
-                "goods",
-                "goods_attr",
-                "goods_attr_value",
-                "goods_brand",
-                "goods_cate",
-                "goods_comment",
-                "goods_comment_replay",
-                "goods_desc",
-                "goods_pics",
-                "goods_sku",
-                "goods_spec");
+//                "goods",
+//                "goods_attr",
+                "goods_attr_value"
+//                "goods_brand",
+//                "goods_cate",
+//                "goods_comment",
+//                "goods_comment_replay",
+//                "goods_desc",
+//                "goods_pics",
+//                "goods_sku",
+//                "goods_spec"
+        );
         // 设置 包命名 下划线转驼峰
         strategy.setNaming(NamingStrategy.underline_to_camel);
         // 设置 数据库列命名 下划线转驼峰

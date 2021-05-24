@@ -39,4 +39,10 @@ public class GoodsAddForm {
     @NotNull(message = "商品sku信息为空")
     @Size(min = 1, message = "商品sku信息为空")
     private List<GoodsSkuAddDto> skuList;
+
+    @Valid
+    @ApiModelProperty(value = "商品-属性值集合")
+    @NotNull(message = "商品属性值为空")
+    @Size(min = 1, message = "商品属性值为空")
+    private List<GoodsAttrValueAddDto> attrList;
 }

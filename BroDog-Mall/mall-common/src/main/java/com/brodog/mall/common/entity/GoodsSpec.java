@@ -39,8 +39,8 @@ public class GoodsSpec implements Serializable {
     @ApiModelProperty(value = "商品规格名称")
     private String name;
 
-    @ApiModelProperty(value = "商品-属性 id")
-    private Long goodsAttrId;
+    @ApiModelProperty(value = "商品-属性分类 id")
+    private Long goodsAttrCateId;
 
     @ApiModelProperty(value = "可选值列表")
     private String valueList;

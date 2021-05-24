@@ -54,8 +54,8 @@ public class GoodsSpecController {
     }
 
     @GetMapping("/getByAttrId")
-    public ApiResult selectByAttrId(@PathParam("attrId") Long attrId) {
-        return goodsSpecService.selectByAttrId(attrId);
+    public ApiResult selectByAttrId(@PathParam("attrCateId") Long attrCateId) {
+        return goodsSpecService.selectByAttrCateId(attrCateId);
     }
 }
 

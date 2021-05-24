@@ -39,13 +39,15 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     private final GoodsDescMapper goodsDescMapper;
     private final GoodsSkuMapper goodsSkuMapper;
     private final GoodsCateMapper goodsCateMapper;
+    private final GoodsAttrValueMapper goodsAttrValueMapper;
 
-    public GoodsServiceImpl(GoodsMapper goodsMapper, GoodsPicsMapper goodsPicsMapper, GoodsDescMapper goodsDescMapper, GoodsSkuMapper goodsSkuMapper, GoodsCateMapper goodsCateMapper) {
+    public GoodsServiceImpl(GoodsMapper goodsMapper, GoodsPicsMapper goodsPicsMapper, GoodsDescMapper goodsDescMapper, GoodsSkuMapper goodsSkuMapper, GoodsCateMapper goodsCateMapper, GoodsAttrValueMapper goodsAttrValueMapper) {
         this.goodsMapper = goodsMapper;
         this.goodsPicsMapper = goodsPicsMapper;
         this.goodsDescMapper = goodsDescMapper;
         this.goodsSkuMapper = goodsSkuMapper;
         this.goodsCateMapper = goodsCateMapper;
+        this.goodsAttrValueMapper = goodsAttrValueMapper;
     }
 
 
@@ -56,6 +58,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         GoodsDescAddDto goodsDescAddDto = goodsAddForm.getGoodsDescInfo();
         List<String> mainPicList = goodsAddForm.getMainPicList();
         List<GoodsSkuAddDto> skuList = goodsAddForm.getSkuList();
+        List<GoodsAttrValueAddDto> attrValueAddDtoList = goodsAddForm.getAttrList();
 
         // 添加商品主表数据
         Goods goods = new Goods();
@@ -70,8 +73,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
         // 添加 商品主图表数据
         // 这里有待调整 MyBatis-Plus service层有saveBatch，如果一次插入多条，需要封装一个 公用service
+        GoodsPics goodsPics = new GoodsPics();
         for (String item : mainPicList) {
-            GoodsPics goodsPics = new GoodsPics();
             goodsPics.setGoodsId(goods.getId());
             goodsPics.setUrl(item);
             goodsPics.setIsDel(0);
@@ -79,11 +82,19 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         }
 
         // 添加商品sku表数据
+        GoodsSku goodsSku = new GoodsSku();
         for (GoodsSkuAddDto dto : skuList) {
-            GoodsSku goodsSku = new GoodsSku();
             goodsSku.setGoodsId(goods.getId());
             BeanUtils.copyProperties(dto,goodsSku);
             goodsSkuMapper.insert(goodsSku);
+        }
+
+        // 添加商品属性值表数据
+        GoodsAttrValue goodsAttrValue = new GoodsAttrValue();
+        for (GoodsAttrValueAddDto dto : attrValueAddDtoList) {
+            goodsAttrValue.setGoodsId(goods.getId());
+            BeanUtils.copyProperties(dto,goodsAttrValue);
+            goodsAttrValueMapper.insert(goodsAttrValue);
         }
 
         // 修改商品分类下商品的个数
@@ -102,6 +113,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         GoodsDescEditDto goodsDescEditDto = goodsEditForm.getGoodsDescInfo();
         List<String> mainPicList = goodsEditForm.getMainPicList();
         List<GoodsSkuEditDto> skuList = goodsEditForm.getSkuList();
+        List<GoodsAttrValueAddDto> attrValueAddDtoList = goodsEditForm.getAttrList();
+
 
         // 编辑商品主表数据
         Goods goods = goodsMapper.selectById(goodsEditDto.getId());
@@ -139,6 +152,18 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
                 goodsSkuMapper.updateById(goodsSku);
             }
         }
+
+        // 处理商品属性值表数据
+        QueryWrapper<GoodsAttrValue> goodsAttrValueQuery = new QueryWrapper<>();
+        goodsAttrValueQuery.eq("goods_id",goods.getId());
+        goodsAttrValueMapper.delete(goodsAttrValueQuery);
+        GoodsAttrValue goodsAttrValue = new GoodsAttrValue();
+        for (GoodsAttrValueAddDto dto : attrValueAddDtoList) {
+            goodsAttrValue.setGoodsId(goods.getId());
+            BeanUtils.copyProperties(dto,goodsAttrValue);
+            goodsAttrValueMapper.insert(goodsAttrValue);
+        }
+
         return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc());
     }
 
@@ -153,8 +178,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 //        throw new OperationalException();
 //    }
 
+    /**
+     * 在删除商品的时候 有些从表的字段未做删除操作， 会出现垃圾数据问题
+     */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = OperationalException.class)
     public ApiResult delete(Long id) {
         if(id == null) {throw new ArgException(); }
         Goods goods = goodsMapper.selectById(id);

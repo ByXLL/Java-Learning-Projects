@@ -1,5 +1,7 @@
 package com.brodog.mall.admin.vo.goods;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,26 +17,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GoodsAttrValueVO {
-    @ApiModelProperty(value = "商品-属性-属性值-id")
+    @ApiModelProperty(value = "商品-属性值-id")
     @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
-    @ApiModelProperty(value = "属性值名称")
-    private String name;
+    @ApiModelProperty(value = "商品id")
+    @JsonSerialize(using= ToStringSerializer.class)
+    private Long goodsId;
 
-    @ApiModelProperty(value = "商品-属性 id")
+    @ApiModelProperty(value = "商品属性 id")
     @JsonSerialize(using= ToStringSerializer.class)
     private Long goodsAttrId;
 
-    @ApiModelProperty(value = "商品-属性 属性名")
-    private String goodsAttrName;
-
-    @ApiModelProperty(value = "可选值列表，逗号拼接")
-    private String valueList;
-
-    @ApiModelProperty(value = "属性值录入方式，0 手动，1 列表选择")
-    private Integer inputType;
-
-    @ApiModelProperty(value = "排序")
-    private Integer sort;
+    @ApiModelProperty(value = "属性值")
+    private String value;
 }

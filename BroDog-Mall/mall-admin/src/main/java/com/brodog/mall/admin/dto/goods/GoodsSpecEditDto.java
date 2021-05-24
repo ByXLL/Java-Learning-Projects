@@ -19,8 +19,8 @@ public class GoodsSpecEditDto {
     private String name;
 
     @ApiModelProperty(value = "商品-属性 id")
-    @NotNull(message = "商品-属性 id为空")
-    private Long goodsAttrId;
+    @NotNull(message = "商品-属性分类 id为空")
+    private Long goodsAttrCateId;
 
     @ApiModelProperty(value = "可选值列表")
     private String valueList;

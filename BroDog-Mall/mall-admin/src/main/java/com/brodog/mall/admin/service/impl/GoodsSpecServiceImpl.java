@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.brodog.mall.admin.dto.goods.GoodsSpecAddDto;
 import com.brodog.mall.admin.dto.goods.GoodsSpecEditDto;
-import com.brodog.mall.admin.mapper.GoodsAttrMapper;
+import com.brodog.mall.admin.mapper.GoodsAttrCateMapper;
 import com.brodog.mall.admin.vo.goods.GoodsSpecVO;
 import com.brodog.mall.common.entity.ApiResult;
-import com.brodog.mall.common.entity.GoodsAttr;
+import com.brodog.mall.common.entity.GoodsAttrCate;
 import com.brodog.mall.common.entity.GoodsSpec;
 import com.brodog.mall.admin.mapper.GoodsSpecMapper;
 import com.brodog.mall.admin.service.GoodsSpecService;
@@ -35,11 +35,11 @@ import java.util.stream.Collectors;
 @Service
 public class GoodsSpecServiceImpl extends ServiceImpl<GoodsSpecMapper, GoodsSpec> implements GoodsSpecService {
     private final GoodsSpecMapper goodsSpecMapper;
-    private final GoodsAttrMapper goodsAttrMapper;
+    private final GoodsAttrCateMapper goodsAttrCateMapper;
 
-    public GoodsSpecServiceImpl(GoodsSpecMapper goodsSpecMapper, GoodsAttrMapper goodsAttrMapper) {
+    public GoodsSpecServiceImpl(GoodsSpecMapper goodsSpecMapper, GoodsAttrCateMapper goodsAttrCateMapper) {
         this.goodsSpecMapper = goodsSpecMapper;
-        this.goodsAttrMapper = goodsAttrMapper;
+        this.goodsAttrCateMapper = goodsAttrCateMapper;
     }
 
     @Override
@@ -48,21 +48,28 @@ public class GoodsSpecServiceImpl extends ServiceImpl<GoodsSpecMapper, GoodsSpec
         GoodsSpec goodsSpec = new GoodsSpec();
         BeanUtils.copyProperties(goodsSpecAddDto,goodsSpec);
         goodsSpec.setIsDel(0);
-        GoodsAttr goodsAttr = goodsAttrMapper.selectById(goodsSpec.getGoodsAttrId());
-        goodsAttr.setSpecCount(goodsAttr.getSpecCount() + 1);
+        GoodsAttrCate goodsAttrCate = goodsAttrCateMapper.selectById(goodsSpec.getGoodsAttrCateId());
+        goodsAttrCate.setSpecCount(goodsAttrCate.getSpecCount() + 1);
         int row1 = goodsSpecMapper.insert(goodsSpec);
-        int row2 = goodsAttrMapper.updateById(goodsAttr);
+        int row2 = goodsAttrCateMapper.updateById(goodsAttrCate);
         if(row1 >0 && row2 >0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();
     }
 
     @Override
+    @Transactional(rollbackFor = OperationalException.class)
     public ApiResult delete(Long goodsSpecId) {
         if(goodsSpecId == null) { throw new ArgException(); }
         GoodsSpec goodsSpec = goodsSpecMapper.selectById(goodsSpecId);
         if(goodsSpec == null) { throw new OperationalException(); }
-        int row = goodsSpecMapper.deleteById(goodsSpecId);
-        if(row > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
+        GoodsAttrCate goodsAttrCate = goodsAttrCateMapper.selectById(goodsSpec.getGoodsAttrCateId());
+        int count = goodsAttrCate.getAttrCount();
+        if(count >= 1) { count--; }
+        else { count=0; }
+        goodsAttrCate.setAttrCount(count);
+        int row1 = goodsSpecMapper.deleteById(goodsSpecId);
+        int row2 = goodsAttrCateMapper.updateById(goodsAttrCate);
+        if(row1 > 0 && row2 > 0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();
     }
 
@@ -100,16 +107,16 @@ public class GoodsSpecServiceImpl extends ServiceImpl<GoodsSpecMapper, GoodsSpec
     }
 
     @Override
-    public ApiResult selectByAttrId(Long id) {
+    public ApiResult selectByAttrCateId(Long attrCateId) {
         QueryWrapper<GoodsSpec> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("goods_attr_id",id);
-        GoodsAttr goodsAttr = goodsAttrMapper.selectById(id);
-        if(goodsAttr == null) { throw new OperationalException("商品属性不存在"); }
+        queryWrapper.eq("goods_attr_cate_id",attrCateId);
+        GoodsAttrCate goodsAttrCate = goodsAttrCateMapper.selectById(attrCateId);
+        if(goodsAttrCate == null) { throw new OperationalException("商品属性分类不存在"); }
         List<GoodsSpecVO> list = goodsSpecMapper.selectList(queryWrapper).stream().map(item -> new GoodsSpecVO(
                 item.getId(),
                 item.getName(),
-                item.getGoodsAttrId(),
-                goodsAttr.getName(),
+                item.getGoodsAttrCateId(),
+                goodsAttrCate.getName(),
                 item.getValueList(),
                 item.getSort()
         )).collect(Collectors.toList());

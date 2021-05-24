@@ -15,9 +15,9 @@ public class GoodsSpecAddDto {
     @NotEmpty(message = "商品规格名称为空")
     private String name;
 
-    @ApiModelProperty(value = "商品-属性 id")
-    @NotNull(message = "商品-属性 id为空")
-    private Long goodsAttrId;
+    @ApiModelProperty(value = "商品-属性分类 id")
+    @NotNull(message = "商品-属性分类 id为空")
+    private Long goodsAttrCateId;
 
     @ApiModelProperty(value = "可选值列表")
     private String valueList;
