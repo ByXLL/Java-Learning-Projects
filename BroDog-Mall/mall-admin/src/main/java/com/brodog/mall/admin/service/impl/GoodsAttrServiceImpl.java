@@ -87,6 +87,7 @@ public class GoodsAttrServiceImpl extends ServiceImpl<GoodsAttrMapper, GoodsAttr
     @Override
     public ApiResult selectByPage(PagerParam pagerParam) {
         QueryWrapper<GoodsAttrVO> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("is_del",0);
         IPage<GoodsAttrVO> page = goodsAttrMapper.selectMyPage(
             new Page<>(pagerParam.getPage(), pagerParam.getSize()),
             queryWrapper
@@ -101,6 +102,8 @@ public class GoodsAttrServiceImpl extends ServiceImpl<GoodsAttrMapper, GoodsAttr
         if(goodsAttr == null) { throw new OperationalException(); }
         GoodsAttrVO goodsAttrVO = new GoodsAttrVO();
         BeanUtils.copyProperties(goodsAttr, goodsAttrVO);
+        GoodsAttrCate goodsAttrCate = goodsAttrCateMapper.selectById(goodsAttrVO.getGoodsAttrCateId());
+        goodsAttrVO.setGoodsAttrCateName(goodsAttrCate.getName());
         return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(), goodsAttrVO);
     }
 

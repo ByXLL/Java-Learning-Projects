@@ -43,10 +43,10 @@ public class GoodsAttrController {
         return service.update(goodsAttrEditDto);
     }
 
-    @GetMapping("/list")
-    public ApiResult selectPage(PagerParam pagerParam) {
-        return service.selectByPage(pagerParam);
-    }
+//    @GetMapping("/list")
+//    public ApiResult selectPage(PagerParam pagerParam) {
+//        return service.selectByPage(pagerParam);
+//    }
 
     @GetMapping("/getById")
     public ApiResult selectById(@PathParam("id") Long id) {
