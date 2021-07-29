@@ -31,8 +31,18 @@ public class GoodsVO {
     @JsonSerialize(using= ToStringSerializer.class)
     private Long cateId;
 
+    @ApiModelProperty(value = "品牌名")
+    private String goodsCateName;
+
     @ApiModelProperty(value = "品牌id")
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long brandId;
+
+    @ApiModelProperty(value = "品牌名称")
+    private String goodsBrandName;
+
+    @ApiModelProperty(value = "商品主图")
+    private String mainPic;
 
     @ApiModelProperty(value = "销量")
     private Integer sales;

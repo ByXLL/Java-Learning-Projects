@@ -37,7 +37,7 @@ public class GoodsSku implements Serializable {
     private Long goodsId;
 
     @ApiModelProperty(value = "sku 编号")
-    private Integer skuNumber;
+    private String skuNumber;
 
     @ApiModelProperty(value = "商品 单价")
     private BigDecimal price;
@@ -59,10 +59,10 @@ public class GoodsSku implements Serializable {
 
     @ApiModelProperty(value = "sku json数据")
     private String data;
-
-    @ApiModelProperty(value = "是否删除， 0 否，1 是")
-    @TableLogic
-    private Integer isDel;
+//
+//    @ApiModelProperty(value = "是否删除， 0 否，1 是")
+//    @TableLogic
+//    private Integer isDel;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)

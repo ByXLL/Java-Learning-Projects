@@ -23,7 +23,7 @@ public class GoodsSkuAddDto {
     private Long goodsId;
 
     @ApiModelProperty(value = "sku 编号")
-    private Integer skuNumber;
+    private String skuNumber;
 
     @ApiModelProperty(value = "商品 单价")
     @NotNull(message = "商品单价 为空")

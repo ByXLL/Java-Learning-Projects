@@ -1,5 +1,6 @@
 package com.brodog.mall.admin.mapper;
 
+import com.brodog.mall.admin.vo.goods.GoodsAttrValueVO;
 import com.brodog.mall.common.entity.GoodsAttrValue;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
@@ -22,4 +23,11 @@ public interface GoodsAttrValueMapper extends BaseMapper<GoodsAttrValue> {
 //     * @return                          响应数据
 //     */
 //    Integer insertBatch(List<GoodsAttrValue> goodsAttrValueList);
+
+    /**
+     * 通过商品id 查询 商品属性值集合
+     * @param goodsId           商品id
+     * @return                  商品属性值vo 集合
+     */
+    List<GoodsAttrValueVO> selectByGoodsId(Long goodsId);
 }

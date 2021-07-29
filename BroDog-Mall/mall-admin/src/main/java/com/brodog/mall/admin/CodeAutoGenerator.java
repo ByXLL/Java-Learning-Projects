@@ -72,7 +72,7 @@ public class CodeAutoGenerator {
         strategy.setInclude(
 //                "goods",
 //                "goods_attr",
-                "goods_attr_value"
+//                "goods_attr_value"
 //                "goods_brand",
 //                "goods_cate",
 //                "goods_comment",
@@ -81,6 +81,13 @@ public class CodeAutoGenerator {
 //                "goods_pics",
 //                "goods_sku",
 //                "goods_spec"
+                "order",
+                "order_goods",
+                "order_operate_history",
+                "order_return_apply",
+                "order_return_apply_delivery",
+                "order_return_reason",
+                "order_setting"
         );
         // 设置 包命名 下划线转驼峰
         strategy.setNaming(NamingStrategy.underline_to_camel);

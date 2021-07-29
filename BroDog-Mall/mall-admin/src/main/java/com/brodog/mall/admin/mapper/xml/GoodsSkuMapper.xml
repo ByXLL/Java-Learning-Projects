@@ -3,6 +3,6 @@
 <mapper namespace="com.brodog.mall.admin.mapper.GoodsSkuMapper">
 
     <select id="selectByGoodsId" resultType="com.brodog.mall.admin.vo.goods.GoodsSkuVO">
-        select * from goods_sku where goods_id = #{goodsId} and is_del = 0
+        select * from goods_sku where goods_id = #{goodsId}
     </select>
 </mapper>

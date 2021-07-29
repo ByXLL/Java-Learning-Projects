@@ -53,7 +53,7 @@ public class GoodsSpecController {
         return goodsSpecService.selectById(id);
     }
 
-    @GetMapping("/getByAttrId")
+    @GetMapping("/getByAttrCateId")
     public ApiResult selectByAttrId(@PathParam("attrCateId") Long attrCateId) {
         return goodsSpecService.selectByAttrCateId(attrCateId);
     }

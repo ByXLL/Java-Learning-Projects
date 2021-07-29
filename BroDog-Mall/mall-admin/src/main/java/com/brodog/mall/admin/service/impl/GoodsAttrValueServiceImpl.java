@@ -2,8 +2,10 @@ package com.brodog.mall.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.brodog.mall.admin.dto.goods.GoodsAttrValueAddDto;
+import com.brodog.mall.admin.mapper.GoodsAttrMapper;
 import com.brodog.mall.admin.vo.goods.GoodsAttrValueVO;
 import com.brodog.mall.common.entity.ApiResult;
+import com.brodog.mall.common.entity.GoodsAttr;
 import com.brodog.mall.common.entity.GoodsAttrValue;
 import com.brodog.mall.admin.mapper.GoodsAttrValueMapper;
 import com.brodog.mall.admin.service.GoodsAttrValueService;
@@ -28,9 +30,11 @@ import java.util.stream.Collectors;
  */
 @Service
 public class GoodsAttrValueServiceImpl extends ServiceImpl<GoodsAttrValueMapper, GoodsAttrValue> implements GoodsAttrValueService {
+    private final GoodsAttrMapper goodsAttrMapper;
     private final GoodsAttrValueMapper goodsAttrValueMapper;
 
-    public GoodsAttrValueServiceImpl(GoodsAttrValueMapper goodsAttrValueMapper) {
+    public GoodsAttrValueServiceImpl(GoodsAttrMapper goodsAttrMapper, GoodsAttrValueMapper goodsAttrValueMapper) {
+        this.goodsAttrMapper = goodsAttrMapper;
         this.goodsAttrValueMapper = goodsAttrValueMapper;
     }
 
@@ -39,6 +43,9 @@ public class GoodsAttrValueServiceImpl extends ServiceImpl<GoodsAttrValueMapper,
         if (attrValueAddDto.getGoodsId() == null) { throw new ArgException("商品id为空"); }
         GoodsAttrValue goodsAttrValue = new GoodsAttrValue();
         BeanUtils.copyProperties(attrValueAddDto,goodsAttrValue);
+        GoodsAttr goodsAttr = goodsAttrMapper.selectById(attrValueAddDto.getGoodsAttrId());
+        if(goodsAttr == null) { throw new OperationalException("商品属性不存在"); }
+        goodsAttrValue.setGoodsAttrName(goodsAttrValue.getGoodsAttrName());
         int row = goodsAttrValueMapper.insert(goodsAttrValue);
         if(row >0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();
@@ -109,6 +116,7 @@ public class GoodsAttrValueServiceImpl extends ServiceImpl<GoodsAttrValueMapper,
             item.getId(),
             item.getGoodsId(),
             item.getGoodsAttrId(),
+            item.getGoodsAttrName(),
             item.getValue()
         )).collect(Collectors.toList());
         return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(),list);

@@ -29,6 +29,9 @@ public class GoodsAttrValueVO {
     @JsonSerialize(using= ToStringSerializer.class)
     private Long goodsAttrId;
 
+    @ApiModelProperty(value = "商品属性名")
+    private String goodsAttrName;
+
     @ApiModelProperty(value = "属性值")
     private String value;
 }

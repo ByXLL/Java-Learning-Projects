@@ -39,15 +39,19 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     private final GoodsDescMapper goodsDescMapper;
     private final GoodsSkuMapper goodsSkuMapper;
     private final GoodsCateMapper goodsCateMapper;
+    private final GoodsAttrMapper goodsAttrMapper;
     private final GoodsAttrValueMapper goodsAttrValueMapper;
+    private final GoodsAttrCateMapper goodsAttrCateMapper;
 
-    public GoodsServiceImpl(GoodsMapper goodsMapper, GoodsPicsMapper goodsPicsMapper, GoodsDescMapper goodsDescMapper, GoodsSkuMapper goodsSkuMapper, GoodsCateMapper goodsCateMapper, GoodsAttrValueMapper goodsAttrValueMapper) {
+    public GoodsServiceImpl(GoodsMapper goodsMapper, GoodsPicsMapper goodsPicsMapper, GoodsDescMapper goodsDescMapper, GoodsSkuMapper goodsSkuMapper, GoodsCateMapper goodsCateMapper, GoodsAttrMapper goodsAttrMapper, GoodsAttrValueMapper goodsAttrValueMapper, GoodsAttrCateMapper goodsAttrCateMapper) {
         this.goodsMapper = goodsMapper;
         this.goodsPicsMapper = goodsPicsMapper;
         this.goodsDescMapper = goodsDescMapper;
         this.goodsSkuMapper = goodsSkuMapper;
         this.goodsCateMapper = goodsCateMapper;
+        this.goodsAttrMapper = goodsAttrMapper;
         this.goodsAttrValueMapper = goodsAttrValueMapper;
+        this.goodsAttrCateMapper = goodsAttrCateMapper;
     }
 
 
@@ -73,27 +77,32 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
         // 添加 商品主图表数据
         // 这里有待调整 MyBatis-Plus service层有saveBatch，如果一次插入多条，需要封装一个 公用service
-        GoodsPics goodsPics = new GoodsPics();
         for (String item : mainPicList) {
+            GoodsPics goodsPics = new GoodsPics();
             goodsPics.setGoodsId(goods.getId());
             goodsPics.setUrl(item);
             goodsPics.setIsDel(0);
+            System.out.println(goodsPics);
             goodsPicsMapper.insert(goodsPics);
         }
 
         // 添加商品sku表数据
-        GoodsSku goodsSku = new GoodsSku();
         for (GoodsSkuAddDto dto : skuList) {
-            goodsSku.setGoodsId(goods.getId());
+            GoodsSku goodsSku = new GoodsSku();
             BeanUtils.copyProperties(dto,goodsSku);
+            goodsSku.setGoodsId(goods.getId());
             goodsSkuMapper.insert(goodsSku);
         }
 
         // 添加商品属性值表数据
-        GoodsAttrValue goodsAttrValue = new GoodsAttrValue();
+        long attrId = attrValueAddDtoList.get(0).getGoodsAttrId();
         for (GoodsAttrValueAddDto dto : attrValueAddDtoList) {
-            goodsAttrValue.setGoodsId(goods.getId());
+            GoodsAttr goodsAttr = goodsAttrMapper.selectById(attrId);
+            if(goodsAttr == null) { throw new OperationalException("商品属性不存在"); }
+            GoodsAttrValue goodsAttrValue = new GoodsAttrValue();
             BeanUtils.copyProperties(dto,goodsAttrValue);
+            goodsAttrValue.setGoodsId(goods.getId());
+            goodsAttrValue.setGoodsAttrName(goodsAttr.getName());
             goodsAttrValueMapper.insert(goodsAttrValue);
         }
 
@@ -139,28 +148,28 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         }
 
         // 编辑商品sku表数据
+        QueryWrapper<GoodsSku> skuQueryWrapper = new QueryWrapper<>();
+        skuQueryWrapper.eq("goods_id",goodsEditDto.getId());
+        goodsSkuMapper.delete(skuQueryWrapper);
         for (GoodsSkuEditDto dto : skuList) {
-            if(dto.getId() == null) {
-                GoodsSku goodsSku = new GoodsSku();
-                goodsSku.setGoodsId(goods.getId());
-                BeanUtils.copyProperties(dto,goodsSku);
-                goodsSkuMapper.insert(goodsSku);
-            }else {
-                GoodsSku goodsSku = goodsSkuMapper.selectById(dto.getId());
-                if(goodsSku == null) { throw new OperationalException(); }
-                BeanUtils.copyProperties(dto,goodsSku);
-                goodsSkuMapper.updateById(goodsSku);
-            }
+            GoodsSku goodsSku = new GoodsSku();
+            BeanUtils.copyProperties(dto,goodsSku);
+            goodsSku.setGoodsId(goods.getId());
+            goodsSkuMapper.insert(goodsSku);
         }
 
         // 处理商品属性值表数据
         QueryWrapper<GoodsAttrValue> goodsAttrValueQuery = new QueryWrapper<>();
         goodsAttrValueQuery.eq("goods_id",goods.getId());
         goodsAttrValueMapper.delete(goodsAttrValueQuery);
-        GoodsAttrValue goodsAttrValue = new GoodsAttrValue();
+        long attrId = attrValueAddDtoList.get(0).getGoodsAttrId();
+        GoodsAttr goodsAttr = goodsAttrMapper.selectById(attrId);
+        if(goodsAttr == null) { throw new OperationalException("商品属性不存在"); }
         for (GoodsAttrValueAddDto dto : attrValueAddDtoList) {
-            goodsAttrValue.setGoodsId(goods.getId());
+            GoodsAttrValue goodsAttrValue = new GoodsAttrValue();
             BeanUtils.copyProperties(dto,goodsAttrValue);
+            goodsAttrValue.setGoodsId(goods.getId());
+            goodsAttrValue.setGoodsAttrName(goodsAttr.getName());
             goodsAttrValueMapper.insert(goodsAttrValue);
         }
 
@@ -178,9 +187,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 //        throw new OperationalException();
 //    }
 
-    /**
-     * 在删除商品的时候 有些从表的字段未做删除操作， 会出现垃圾数据问题
-     */
+    // 在删除商品的时候 有些从表的字段未做删除操作， 会出现垃圾数据问题
+
     @Override
     @Transactional(rollbackFor = OperationalException.class)
     public ApiResult delete(Long id) {
@@ -242,6 +250,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         if(param.getIsPreSale() != null) { queryWrapper.eq("is_pre_sale", param.getIsPreSale()); }
         if(param.getVerifyStatus() != null) { queryWrapper.eq("verify_status",param.getVerifyStatus()); }
         if(!StringUtils.isBlank(param.getName())) { queryWrapper.like("name",param.getName()); }
+        queryWrapper.eq("g.is_del",0).groupBy("g.id");
         IPage<GoodsVO> page = goodsMapper.selectMyPage(
             new Page<>(param.getPage(), param.getSize()),
             queryWrapper
@@ -258,12 +267,21 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         List<GoodsPicVO> goodsPics = goodsPicsMapper.selectPicsByGoodsId(id);
         GoodsDescVO goodsDescVO = goodsDescMapper.selectByGoodsId(id);
         List<GoodsSkuVO> goodsSkuVOList = goodsSkuMapper.selectByGoodsId(id);
+        List<GoodsAttrValueVO> goodsAttrValueVOList = goodsAttrValueMapper.selectByGoodsId(goodsVO.getId());
 
         GoodsDetailVO goodsDetailVO = new GoodsDetailVO();
         BeanUtils.copyProperties(goodsVO,goodsDetailVO);
         goodsDetailVO.setDescInfo(goodsDescVO);
         goodsDetailVO.setMainPicList(goodsPics);
         goodsDetailVO.setSku(goodsSkuVOList);
+        goodsDetailVO.setAttrList(goodsAttrValueVOList);
+        if(goodsAttrValueVOList.size() >0) {
+            Long goodsAttrId =  goodsAttrValueVOList.get(0).getGoodsAttrId();
+            GoodsAttr goodsAttr = goodsAttrMapper.selectById(goodsAttrId);
+            if(goodsAttr != null) {
+                goodsDetailVO.setGoodsAttrCateId(goodsAttr.getGoodsAttrCateId());
+            }
+        }
 
         return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(),goodsDetailVO);
     }

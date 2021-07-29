@@ -4,8 +4,11 @@
     <select id="selectMyPage" resultType="com.brodog.mall.admin.vo.goods.GoodsAttrValueVO">
         select * from goods_attr_value <where>${ew.sqlSegment}</where>
     </select>
+    <select id="selectByGoodsId" resultType="com.brodog.mall.admin.vo.goods.GoodsAttrValueVO">
+        select * from goods_attr_value where goods_id = #{goodsId}
+    </select>
 
-<!--    <insert id="insertBatch">-->
+    <!--    <insert id="insertBatch">-->
 <!--        insert into goods_attr_value-->
 <!--    </insert>-->
 </mapper>

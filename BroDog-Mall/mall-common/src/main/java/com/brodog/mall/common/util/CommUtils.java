@@ -1,18 +1,25 @@
 package com.brodog.mall.common.util;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.brodog.mall.common.entity.User;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 公共工具类
  * @author By-Lin
  */
 public class CommUtils {
+    public final static String SECRET =  "fhsrjoquohtrnznewpopnks";
+
     /***
      * 获取 md5 加密后的字段
      * @param key   需要加密的字段
@@ -79,5 +86,80 @@ public class CommUtils {
             newList.addAll(Arrays.asList(list));
         }
         return newList;
+    }
+
+    /**
+     * 随机生成 1000 - 9999 随机数
+     * @return      随机数
+     */
+    public static int get4Number() {
+        Random ne=new Random();
+        return ne.nextInt(9999-1000+1)+1000;
+    }
+
+    /***
+     * 生成随机 uuid
+     * @return  生成的uuid
+     */
+    public static String generateUUID() {
+        return UUID.randomUUID().toString().replaceAll("-","");
+    }
+
+
+    /**
+     * 获取用户token
+     * @param userId      用户id
+     * @return            token
+     */
+    public static String getToken(Long userId) {
+        int time = 60 * 60 * 1000;
+        Long now = System.currentTimeMillis();
+        Long expMils = now + time;
+        String token="";
+
+        token= JWT.create().withAudience(String.valueOf(userId))
+                .withExpiresAt(new Date(expMils))
+                .sign(Algorithm.HMAC256(SECRET));
+        return token;
+    }
+
+    /**
+     * 校验是否是 手机大陆手机号码
+     * @param str       手机号码
+     * @return          布尔值
+     */
+    public static boolean isChinaPhoneLegal(String str){
+        // ^ 匹配输入字符串开始的位置
+        // \d 匹配一个或多个数字，其中 \ 要转义，所以是 \\d
+        // $ 匹配输入字符串结尾的位置
+        String regExp = "^((13[0-9])|(14[5,7,9])|(15[0-3,5-9])|(166)|(17[3,5,6,7,8])" +
+                "|(18[0-9])|(19[8,9]))\\d{8}$";
+        Pattern p = Pattern.compile(regExp);
+        Matcher m = p.matcher(str);
+        return m.matches();
+    }
+
+    /**
+     * 从Date类型的时间中提取日期部分
+     */
+    public static Date getDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
+    }
+
+    /**
+     * 从Date类型的时间中提取时间部分
+     */
+    public static Date getTime(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.YEAR, 1970);
+        calendar.set(Calendar.MONTH, 0);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime();
     }
 }

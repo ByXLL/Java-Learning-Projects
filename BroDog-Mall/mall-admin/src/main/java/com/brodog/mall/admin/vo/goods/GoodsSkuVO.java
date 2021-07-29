@@ -26,8 +26,7 @@ public class GoodsSkuVO {
     private Long goodsId;
 
     @ApiModelProperty(value = "sku 编号")
-    @JsonSerialize(using= ToStringSerializer.class)
-    private Integer skuNumber;
+    private String skuNumber;
 
     @ApiModelProperty(value = "商品 单价")
     private BigDecimal price;

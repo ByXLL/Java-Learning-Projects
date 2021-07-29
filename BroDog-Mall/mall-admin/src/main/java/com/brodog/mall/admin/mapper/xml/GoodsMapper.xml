@@ -3,6 +3,11 @@
 <mapper namespace="com.brodog.mall.admin.mapper.GoodsMapper">
 
     <select id="selectMyPage" resultType="com.brodog.mall.admin.vo.goods.GoodsVO">
-        select * from goods <where>${ew.sqlSegment}</where>
+        select g.*,gb.`name` as goods_brand_name, gc.`name` as goods_cate_name, gp.url as main_pic
+        from goods as g
+        left join goods_brand as gb on gb.id = g.brand_id and gb.is_del = 0
+        left join goods_cate as gc on gc.id = g.cate_id and gc.is_del = 0
+        left join goods_pics as gp on gp.goods_id = g.id and gp.is_del = 0
+        <where>${ew.sqlSegment}</where>
     </select>
 </mapper>

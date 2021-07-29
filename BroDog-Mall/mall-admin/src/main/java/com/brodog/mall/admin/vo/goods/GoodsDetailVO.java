@@ -1,5 +1,6 @@
 package com.brodog.mall.admin.vo.goods;
 
+import com.brodog.mall.admin.dto.goods.GoodsAttrValueAddDto;
 import com.brodog.mall.common.entity.GoodsSku;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -9,6 +10,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -28,4 +31,11 @@ public class GoodsDetailVO extends GoodsVO {
 
     @ApiModelProperty(value = "商品-sku")
     private List<GoodsSkuVO> sku;
+
+    @ApiModelProperty(value = "商品-属性分类id")
+    @JsonSerialize(using= ToStringSerializer.class)
+    private Long goodsAttrCateId;
+
+    @ApiModelProperty(value = "商品-属性值集合")
+    private List<GoodsAttrValueVO> attrList;
 }

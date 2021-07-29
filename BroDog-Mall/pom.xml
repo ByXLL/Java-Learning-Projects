@@ -11,6 +11,7 @@
     <modules>
         <module>mall-admin</module>
         <module>mall-common</module>
+        <module>mall-app</module>
     </modules>
 
     <!--  自定义配置  -->
@@ -30,6 +31,9 @@
         <swagger.version>2.1.7</swagger.version>
         <swagger.annotations.version>1.5.20</swagger.annotations.version>
         <log4j.version>1.2.17</log4j.version>
+        <jwt.vsersion>3.4.0</jwt.vsersion>
+        <autoconfigure.vsersion>2.4.4</autoconfigure.vsersion>
+        <mybatis.plus.extension.version>3.0.5</mybatis.plus.extension.version>
     </properties>
     <!--  全局共用包管理 子模块可以按需导入并且可以忽略版本  -->
     <dependencyManagement>
@@ -121,6 +125,36 @@
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
+
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger2</artifactId>-->
+<!--                <version>${swagger.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger-ui</artifactId>-->
+<!--                <version>${swagger.version}</version>-->
+<!--            </dependency>-->
+
+<!--            <dependency>-->
+<!--                <groupId>com.baomidou</groupId>-->
+<!--                <artifactId>mybatis-plus-extension</artifactId>-->
+<!--                <version>${mybatis.plus.extension.version}</version>-->
+<!--            </dependency>-->
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-extension</artifactId>
+                <version>3.0.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${jwt.vsersion}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

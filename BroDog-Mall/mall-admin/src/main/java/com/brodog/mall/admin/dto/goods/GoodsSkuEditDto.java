@@ -27,7 +27,7 @@ public class GoodsSkuEditDto {
     private Long goodsId;
 
     @ApiModelProperty(value = "sku 编号")
-    private Integer skuNumber;
+    private String skuNumber;
 
     @ApiModelProperty(value = "商品 单价")
     private BigDecimal price;
