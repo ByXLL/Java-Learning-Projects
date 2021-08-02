@@ -47,19 +47,9 @@ public class GoodsVO {
     @ApiModelProperty(value = "市场价")
     private BigDecimal marketPrice;
 
-    @ApiModelProperty(value = "计量单位")
-    private String unit;
-
     @ApiModelProperty(value = "商品图片")
     private String mainPic;
 
-    @ApiModelProperty(value = "重量")
-    private Double weight;
-
     @ApiModelProperty(value = "是否推荐， 0 否，1 是")
     private Integer isHot;
-
-    @ApiModelProperty(value = "是否预售商品，0 否，1 是")
-    private Integer isPreSale;
-
 }

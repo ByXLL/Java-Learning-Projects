@@ -41,7 +41,7 @@ class GoodsServiceImplTest {
 
     @Test
     void selectGoodsDetailById() {
-        ApiResult result = service.selectGoodsDetailById(1L);
+        ApiResult result = service.selectGoodsDetailById(1399004981104087042L);
         System.out.println();
     }
 }

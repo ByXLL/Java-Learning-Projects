@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * 请求拦截器配置
  * @author By-Lin
  */
-@Configuration
+//@Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
     private final UserService userService;
 

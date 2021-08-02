@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler({OperationalException.class})
     public ApiResult operationalExceptionHandler(HttpServletRequest request, Exception e){
-        e.printStackTrace();
+//        e.printStackTrace();
         log.error("URL:{} ,操作失败: {}",request.getRequestURI(), e.getMessage());
         return new ApiResult(HttpCodeEnum.ERROR.getCode(),"操作失败",e.getMessage());
     }

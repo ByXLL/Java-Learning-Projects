@@ -64,6 +64,9 @@ public class GoodsSku implements Serializable {
 //    @TableLogic
 //    private Integer isDel;
 
+    @Version
+    private Integer version;
+
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;

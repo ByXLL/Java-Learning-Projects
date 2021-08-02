@@ -40,12 +40,6 @@ public class GoodsComment implements Serializable {
     @ApiModelProperty(value = "商品id")
     private Long goodsId;
 
-    @ApiModelProperty(value = "商品分类id")
-    private Long goodsCateId;
-
-    @ApiModelProperty(value = "商品属性id")
-    private Long goodsAttrId;
-
     @ApiModelProperty(value = "商品名称")
     private String goodsName;
 

@@ -45,7 +45,7 @@ public class GoodsAttrValueServiceImpl extends ServiceImpl<GoodsAttrValueMapper,
         BeanUtils.copyProperties(attrValueAddDto,goodsAttrValue);
         GoodsAttr goodsAttr = goodsAttrMapper.selectById(attrValueAddDto.getGoodsAttrId());
         if(goodsAttr == null) { throw new OperationalException("商品属性不存在"); }
-        goodsAttrValue.setGoodsAttrName(goodsAttrValue.getGoodsAttrName());
+        goodsAttrValue.setGoodsAttrName(goodsAttr.getName());
         int row = goodsAttrValueMapper.insert(goodsAttrValue);
         if(row >0) { return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc()); }
         throw new OperationalException();

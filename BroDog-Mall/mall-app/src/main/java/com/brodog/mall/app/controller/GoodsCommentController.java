@@ -1,9 +1,13 @@
 package com.brodog.mall.app.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.brodog.mall.app.dto.goodsComment.GoodsCommentAddDto;
+import com.brodog.mall.app.form.goodsComment.GoodsCommentSelectParam;
+import com.brodog.mall.app.service.impl.GoodsCommentServiceImpl;
+import com.brodog.mall.common.entity.ApiResult;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -14,8 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-07-01
  */
 @RestController
-@RequestMapping("/goods-comment")
+@RequestMapping("/goodsComment")
 public class GoodsCommentController {
+    private final GoodsCommentServiceImpl goodsCommentService;
 
+    public GoodsCommentController(GoodsCommentServiceImpl goodsCommentService) {
+        this.goodsCommentService = goodsCommentService;
+    }
+
+    @PostMapping("/add")
+    public ApiResult add(@Valid @RequestBody GoodsCommentAddDto addDto) {
+        return goodsCommentService.addGoodsComment(addDto);
+    }
+
+    @GetMapping("/getList")
+    public ApiResult getListByParam(@Valid GoodsCommentSelectParam param) {
+        return goodsCommentService.selectListByParam(param);
+    }
 }
 

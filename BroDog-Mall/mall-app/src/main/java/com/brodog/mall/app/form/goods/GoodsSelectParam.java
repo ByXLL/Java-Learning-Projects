@@ -33,6 +33,6 @@ public class GoodsSelectParam extends PagerParam {
     @ApiModelProperty(value = "最大价格")
     private BigDecimal maxPrice;
 
-    @ApiModelProperty(value = "排序条件：0->综合、1->评论、2->销量、3->价格升序、4->价格降序")
+    @ApiModelProperty(value = "排序条件：0->综合、1->销量、2->价格升序、3->价格降序")
     private Integer sortBy;
 }

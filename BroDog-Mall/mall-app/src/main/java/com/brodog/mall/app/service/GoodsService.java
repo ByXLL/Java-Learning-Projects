@@ -18,7 +18,8 @@ import com.brodog.mall.common.entity.PagerParam;
 public interface GoodsService extends IService<Goods> {
     /**
      * 查询热卖商品列表
-     * @return      响应数据
+     * @param pagerParam     筛选条件实体
+     * @return               响应数据
      */
     ApiResult selectHotList(PagerParam pagerParam);
 

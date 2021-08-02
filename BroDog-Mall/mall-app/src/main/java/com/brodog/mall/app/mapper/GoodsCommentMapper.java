@@ -1,7 +1,9 @@
 package com.brodog.mall.app.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.brodog.mall.app.vo.goodsComment.GoodsCommentVo;
 import com.brodog.mall.common.entity.GoodsComment;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +13,7 @@ import com.brodog.mall.common.entity.GoodsComment;
  * @author By-Lin
  * @since 2021-07-01
  */
-public interface GoodsCommentMapper extends BaseMapper<GoodsComment> {
+@Repository
+public interface GoodsCommentMapper extends IPageInterface<GoodsComment, GoodsCommentVo> {
 
 }

@@ -2,6 +2,7 @@ package com.brodog.mall.app.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.brodog.mall.app.dto.order.OrderGoodsAddDto;
 import com.brodog.mall.app.form.order.OrderAddForm;
@@ -37,7 +38,6 @@ import java.util.Map;
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderGoodsMapper orderGoodsMapper;
-    private final OrderOperateHistoryMapper orderOperateHistoryMapper;
     private final OrderReturnApplyMapper orderReturnApplyMapper;
     private final OrderReturnApplyDeliveryMapper orderReturnApplyDeliveryMapper;
     private final GoodsMapper goodsMapper;
@@ -50,7 +50,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     public OrderServiceImpl(OrderMapper orderMapper,
                             OrderGoodsMapper orderGoodsMapper,
-                            OrderOperateHistoryMapper orderOperateHistoryMapper,
                             OrderReturnApplyMapper orderReturnApplyMapper,
                             OrderReturnApplyDeliveryMapper orderReturnApplyDeliveryMapper,
                             GoodsMapper goodsMapper,
@@ -59,7 +58,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                             OrderSettingMapper orderSettingMapper) {
         this.orderMapper = orderMapper;
         this.orderGoodsMapper = orderGoodsMapper;
-        this.orderOperateHistoryMapper = orderOperateHistoryMapper;
         this.orderReturnApplyMapper = orderReturnApplyMapper;
         this.orderReturnApplyDeliveryMapper = orderReturnApplyDeliveryMapper;
         this.goodsMapper = goodsMapper;
@@ -73,42 +71,48 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     @Transactional(rollbackFor = OperationalException.class)
     public ApiResult addOrder(OrderAddForm orderAddForm) {
-        Order order = new Order();
-        BeanUtils.copyProperties(orderAddForm,order);
+        // 生成订单编号和订单id
+        String orderNumber = String.valueOf(System.currentTimeMillis()) + CommUtils.get4Number();
+        Long orderId = IdWorker.getId();
+        // 订单来源
+        int sourceType = orderAddForm.getSourceType();
+        // 订单商品列表
+        List<OrderGoodsAddDto> orderGoodsAddDtoList = orderAddForm.getOrderGoodsList();
 
+        // 计算订单总价
+        BigDecimal totalPrice = new BigDecimal("0.00");
+        // todo
+
+        //处理订单商品
+        for (OrderGoodsAddDto item : orderGoodsAddDtoList) {
+            // 减库存
+            totalPrice = reduceInventoryAndGetTotalPrice(item,orderId,orderNumber);
+            // 移除购物车
+            if(sourceType == 1) { removeShoppingCart(item); }
+        }
+
+        // 获取订单设置
         OrderSetting orderSetting = orderSettingMapper.selectById(1L);
         if(orderSetting == null) { throw new OperationalException("创建订单失败，订单设置信息获取失败"); }
 
-        String orderNumber = String.valueOf(System.currentTimeMillis()) + CommUtils.get4Number();
-        order.setOrderNumber(orderNumber).setStatus(1).setSubStatus(1).setPayStatus(0)
-                .setTotalAmount(new BigDecimal("0.00"))
-                .setPayAmount(new BigDecimal("0.00"))
+
+
+        Order order = new Order();
+        BeanUtils.copyProperties(orderAddForm,order);
+        order.setId(orderId).setOrderNumber(orderNumber)
+                .setStatus(1).setSubStatus(1).setPayStatus(0)
                 .setFreightAmount(new BigDecimal("0.00"))
                 .setIntegrationAmount(new BigDecimal("0.00"))
                 .setCouponAmount(new BigDecimal("0.00"))
                 .setConfirmStatus(0)
+                .setTotalAmount(totalPrice)
+                .setPayAmount(totalPrice)
                 .setAutoConfirmDay(orderSetting.getConfirmOvertime());
 
         int row = orderMapper.insert(order);
 
         if(row < 1) { throw new OperationalException("创建订单失败"); }
 
-        // 处理订单商品
-        List<OrderGoodsAddDto> orderGoodsAddDtoList = orderAddForm.getOrderGoodsList();
-        /*
-         * 先给支付金额设置为0 入库，生成orderId 给后面的从表入库
-         */
-        BigDecimal totalPrice = new BigDecimal("0.00");
-        for (OrderGoodsAddDto item : orderGoodsAddDtoList) {
-            // 减库存和获取总价格
-            totalPrice = totalPrice.add(reduceInventoryAndGetTotalPrice(item,order));
-            // 移除购物车
-            int sourceType = orderAddForm.getSourceType();
-            if(sourceType == 1) { removeShoppingCart(item); }
-        }
-
-        order.setTotalAmount(totalPrice).setPayAmount(totalPrice);
-        orderMapper.updateById(order);
         Map<String,Object> orderInfo = new HashMap<>(16);
         orderInfo.put("orderNumber",order.getOrderNumber());
         return new ApiResult(HttpCodeEnum.SUCCESS.getCode(), HttpCodeEnum.SUCCESS.getDesc(),orderInfo);
@@ -195,11 +199,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     /**
      * 减库存和计算当前商品总价
-     * @param dto       订单商品添加dto
-     * @param order     订单实体
+     * @param dto               订单商品添加dto
+     * @param orderId           订单id
+     * @param orderNumber       订单编号
      * @return          当前商品总价
      */
-    private BigDecimal reduceInventoryAndGetTotalPrice(OrderGoodsAddDto dto, Order order) {
+    private BigDecimal reduceInventoryAndGetTotalPrice(OrderGoodsAddDto dto, Long orderId, String orderNumber) {
         Goods goods = goodsMapper.selectById(dto.getGoodsId());
         GoodsSku goodsSku = goodsSkuMapper.selectOne(new QueryWrapper<GoodsSku>().eq("sku_number",dto.getSkuNumber()));
         if(goods == null || goodsSku == null) { throw new OperationalException("创建订单失败，商品不存在"); }
@@ -218,10 +223,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
          */
         OrderGoods orderGoods = new OrderGoods();
         BeanUtils.copyProperties(dto,orderGoods);
-        orderGoods.setOrderId(order.getId())
+        orderGoods.setOrderId(orderId)
                 .setGoodsCateId(goods.getCateId())
                 .setGoodsName(goods.getName())
-                .setOrderNumber(order.getOrderNumber())
+                .setOrderNumber(orderNumber)
                 .setSkuId(goodsSku.getId())
                 .setSkuNumber(goodsSku.getSkuNumber())
                 .setSellPrice(goodsSku.getPrice())
@@ -235,6 +240,49 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         return orderGoods.getPayPrice();
     }
 
+
+
+    /**
+     * 减库存
+     * @param dto               订单商品添加dto
+     * @param orderId           订单id
+     * @param orderNumber       订单编号
+     */
+    private synchronized  void reduceInventory(OrderGoodsAddDto dto, Long orderId, String orderNumber) {
+        Goods goods = goodsMapper.selectById(dto.getGoodsId());
+        GoodsSku goodsSku = goodsSkuMapper.selectOne(new QueryWrapper<GoodsSku>().eq("sku_number",dto.getSkuNumber()));
+        if(goods == null || goodsSku == null) { throw new OperationalException("创建订单失败，商品不存在"); }
+        // 判断库存量
+        int newSkuStock = goodsSku.getStock() -  dto.getCount();
+        if( newSkuStock < 0 ){ throw new OperationalException("创建订单失败，商品库存不足"); }
+        // 处理商品主表的库存量
+        // todo
+
+        // 处理sku表库存量
+        goodsSku.setStock(newSkuStock);
+        goodsSkuMapper.updateById(goodsSku);
+
+        /*
+         * 插入 订单商品表
+         * future 完善促销减免与优惠卷减免
+         */
+        OrderGoods orderGoods = new OrderGoods();
+        BeanUtils.copyProperties(dto,orderGoods);
+        orderGoods.setOrderId(orderId)
+                .setGoodsCateId(goods.getCateId())
+                .setGoodsName(goods.getName())
+                .setOrderNumber(orderNumber)
+                .setSkuId(goodsSku.getId())
+                .setSkuNumber(goodsSku.getSkuNumber())
+                .setSellPrice(goodsSku.getPrice())
+                .setPromotionPrice(new BigDecimal(0))
+                .setCouponPrice(new BigDecimal(0))
+                .setBrandId(goods.getBrandId())
+                .setPayPrice(goodsSku.getPrice().multiply(new BigDecimal(dto.getCount())));
+
+        int row = orderGoodsMapper.insert(orderGoods);
+        if(row <1) { throw new OperationalException("创建订单失败，插入订单商品表失败"); }
+    }
 
     /**
      * 根据订单移除购物车中的商品

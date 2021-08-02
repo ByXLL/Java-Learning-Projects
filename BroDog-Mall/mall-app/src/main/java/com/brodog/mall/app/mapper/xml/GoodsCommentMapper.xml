@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.brodog.mall.app.mapper.GoodsCommentMapper">
-
+    <select id="selectMyPage" resultType="com.brodog.mall.app.vo.goodsComment.GoodsCommentVo">
+        select gc.* , user.name as `user_name`
+        from goods_comment as gc
+        left join user on user.id = gc.user_id
+        <where>${ew.sqlSegment}</where>
+        order by gc.create_time
+    </select>
 </mapper>

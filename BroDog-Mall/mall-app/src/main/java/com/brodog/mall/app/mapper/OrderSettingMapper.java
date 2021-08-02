@@ -1,6 +1,5 @@
 package com.brodog.mall.app.mapper;
 
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.brodog.mall.common.entity.OrderSetting;
 import org.springframework.stereotype.Repository;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * </p>
  *
  * @author By-Lin
- * @since 2021-06-20
+ * @since 2021-06-13
  */
 @Repository
 public interface OrderSettingMapper extends BaseMapper<OrderSetting> {
